@@ -1,0 +1,49 @@
+version: 2
+updates:
+  # Enable version updates for Go
+  - package-ecosystem: "gomod"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "go"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
+    reviewers:
+      - "kopexa-grc/security-team"
+    assignees:
+      - "kopexa-grc/maintainers"
+    ignore:
+      # Ignore major version updates
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+    versioning-strategy: "auto"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    # Auto-merge configuration
+    auto-merge:
+      # Only auto-merge patch updates
+      update-types: ["version-update:semver-patch"]
+      # Only auto-merge if tests pass
+      required-status-checks:
+        - "test"
+        - "lint"
+      # Only auto-merge for trusted dependencies
+      allowed-updates:
+        - match:
+            dependency-name: "github.com/stretchr/testify"
+            update-types: ["version-update:semver-patch"]
+        - match:
+            dependency-name: "gopkg.in/yaml.v3"
+            update-types: ["version-update:semver-patch"]
+        - match:
+            dependency-name: "github.com/davecgh/go-spew"
+            update-types: ["version-update:semver-patch"]
+        - match:
+            dependency-name: "github.com/pmezard/go-difflib"
+            update-types: ["version-update:semver-patch"] 
