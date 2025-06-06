@@ -1,0 +1,38 @@
+Kopexa
+
+
+WELCOME TO {{ .ORGNAME }}!
+
+Hello {{ .DisplayName }},
+
+Congratulations! Your organization has been successfully created. You're now
+ready to start building your team and managing your resources.
+
+Next steps:
+
+1. Invite team members to join your organization
+
+2. Set up your organization's settings and preferences
+
+3. Configure your first space and resources
+
+We're excited to have you on board and can't wait to see what you'll build with
+Kopexa!
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Unterjörn 19a
+24536 Neumünster
+Germany

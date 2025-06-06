@@ -16,7 +16,9 @@ async function doRender() {
 
   for (const template of templates) {
     const { component, name } = template;
+    // @ts-expect-error TODO: fix this
     const html = await render(createElement(component));
+    // @ts-expect-error TODO: fix this
     const txt = await render(createElement(component), {
       plainText: true,
     });
