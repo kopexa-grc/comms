@@ -68,3 +68,4 @@ results.txt
 
 # Build
 build/
+node_modules/
