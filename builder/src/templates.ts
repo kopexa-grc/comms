@@ -8,6 +8,7 @@ import { VerifyEmail } from "./auth/verify-email";
 import Welcome from "./auth/welcome";
 import OrgCreated from "./org/created";
 import OrgInvite from "./org/invite";
+import PasswordResetSuccess from "./auth/password-reset-success";
 
 export const templates = [
   {
@@ -29,5 +30,9 @@ export const templates = [
   {
     component: OrgInvite,
     name: "org-invite",
+  },
+  {
+    component: PasswordResetSuccess,
+    name: "password-reset-success",
   },
 ];
