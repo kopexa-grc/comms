@@ -1,0 +1,15 @@
+# Copyright (c) Kopexa GmbH
+# SPDX-License-Identifier: BUSL-1.1
+
+version: "3"
+
+includes:
+  builder:
+    dir: ./builder
+    taskfile: ./builder/taskfile.dist.yml
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
