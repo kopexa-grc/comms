@@ -1,0 +1,32 @@
+Kopexa
+
+Good news! 🎉
+
+{{ .InviteeName }} has accepted your invitation and joined the organization "{{
+.Organization }}" on Kopexa.
+
+You can now assign responsibilities, grant access to spaces, or share
+assessments.
+
+Manage team members https://app.kopexa.com/org/members
+
+This email was sent to you because you invited {{ .InviteeName }} to join your
+organization.
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Unterjörn 19a
+24536 Neumünster
+Germany

@@ -9,6 +9,7 @@ import Welcome from "./auth/welcome";
 import OrgCreated from "./org/created";
 import OrgInvite from "./org/invite";
 import PasswordResetSuccess from "./auth/password-reset-success";
+import InviteAccepted from "./org/invite-accepted";
 
 export const templates = [
   {
@@ -34,5 +35,9 @@ export const templates = [
   {
     component: PasswordResetSuccess,
     name: "password-reset-success",
+  },
+  {
+    component: InviteAccepted,
+    name: "org-invite-accepted",
   },
 ];
