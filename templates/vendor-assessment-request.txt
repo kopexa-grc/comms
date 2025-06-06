@@ -1,0 +1,42 @@
+Kopexa
+
+Vendor Assessment Request 📋
+
+Hello {{ .DisplayName }},
+
+{{ .ActorName }} from {{ .OrganizationName }} has requested you to complete a
+vendor assessment. This assessment helps us ensure our vendors meet our quality
+and compliance standards.
+
+Please click the button below to start the assessment process. The assessment
+should take approximately 15-20 minutes to complete.
+
+Start Assessment {{ .AssessmentUrl }}
+
+If the button doesn't work, you can copy and paste this link into your browser:
+
+{{ .AssessmentUrl }}
+
+If you have any questions or need assistance, please don't hesitate to contact
+our support team at support@kopexa.com support@kopexa.com
+
+This assessment is an important part of our vendor management process and helps
+us maintain high standards of quality and compliance.
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Unterjörn 19a
+24536 Neumünster
+Germany

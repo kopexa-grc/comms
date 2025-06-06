@@ -10,6 +10,7 @@ import OrgCreated from "./org/created";
 import OrgInvite from "./org/invite";
 import PasswordResetSuccess from "./auth/password-reset-success";
 import InviteAccepted from "./org/invite-accepted";
+import { VendorAssessmentRequest } from "./assessment/vendor-request";
 
 export const templates = [
   {
@@ -40,4 +41,8 @@ export const templates = [
     component: InviteAccepted,
     name: "org-invite-accepted",
   },
-];
+  {
+    component: VendorAssessmentRequest,
+    name: "vendor-assessment-request",
+  },
+] as const;
