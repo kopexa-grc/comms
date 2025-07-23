@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/kopexa-grc/comms/compare/v1.0.0...v1.1.0) (2025-07-23)
+
+
+### Features
+
+* add subscription email functionality with HTML and text templates, and implement sending logic ([dd81130](https://github.com/kopexa-grc/comms/commit/dd811309ce979bd696bb8351e16a449df1a6621f))
+
+
+### Bug Fixes
+
+* remove unnecessary blank line in SendNewSubscriber function ([2b778fb](https://github.com/kopexa-grc/comms/commit/2b778fb862ebc5153dcf1882649503d0342c9cdc))
+
 ## 1.0.0 (2025-06-06)
 
 
