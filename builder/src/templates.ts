@@ -3,14 +3,15 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
+import { VendorAssessmentRequest } from "./assessment/vendor-request";
 import ForgotPassword from "./auth/forgot-password";
+import PasswordResetSuccess from "./auth/password-reset-success";
 import { VerifyEmail } from "./auth/verify-email";
 import Welcome from "./auth/welcome";
 import OrgCreated from "./org/created";
 import OrgInvite from "./org/invite";
-import PasswordResetSuccess from "./auth/password-reset-success";
 import InviteAccepted from "./org/invite-accepted";
-import { VendorAssessmentRequest } from "./assessment/vendor-request";
+import Subscribe from "./subscribe";
 
 export const templates = [
   {
@@ -44,5 +45,9 @@ export const templates = [
   {
     component: VendorAssessmentRequest,
     name: "vendor-assessment-request",
+  },
+  {
+    component: Subscribe,
+    name: "subscribe",
   },
 ] as const;

@@ -36,4 +36,4 @@ func (c *Comms) SendPasswordResetSuccessEmail(ctx context.Context, recipient Rec
 	}
 
 	return nil
-} 
+}

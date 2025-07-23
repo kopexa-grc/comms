@@ -43,4 +43,4 @@ func (c *Comms) SendInviteAcceptedEmail(ctx context.Context, recipient Recipient
 	}
 
 	return nil
-} 
+}

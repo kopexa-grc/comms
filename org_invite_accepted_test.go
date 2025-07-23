@@ -56,4 +56,4 @@ func TestComms_SendInviteAcceptedEmail_InvalidRecipient(t *testing.T) {
 	err := comms.SendInviteAcceptedEmail(context.Background(), recipient, data)
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "invalid recipient")
-} 
+}

@@ -11,9 +11,9 @@ import (
 )
 
 type VendorAssessmentData struct {
-	ActorName      string
+	ActorName        string
 	OrganizationName string
-	AssessmentURL  string
+	AssessmentURL    string
 }
 
 // SendVendorAssessmentEmail sends a request email to a vendor to complete an assessment.
@@ -23,10 +23,10 @@ func (c *Comms) SendVendorAssessmentEmail(ctx context.Context, recipient Recipie
 	}
 
 	text, html, err := Render("vendor-assessment-request", map[string]string{
-		"DisplayName":     recipient.Name(),
-		"ActorName":       data.ActorName,
+		"DisplayName":      recipient.Name(),
+		"ActorName":        data.ActorName,
 		"OrganizationName": data.OrganizationName,
-		"AssessmentUrl":   data.AssessmentURL,
+		"AssessmentUrl":    data.AssessmentURL,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to render vendor assessment email: %w", err)
@@ -45,4 +45,4 @@ func (c *Comms) SendVendorAssessmentEmail(ctx context.Context, recipient Recipie
 	}
 
 	return nil
-} 
+}

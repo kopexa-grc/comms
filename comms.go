@@ -6,6 +6,8 @@
 // customization options.
 package comms
 
+import "net/url"
+
 // Comms is the main struct that provides email communication functionality.
 // It holds the configuration and provides methods for sending different types
 // of emails.
@@ -41,4 +43,19 @@ func New(opts ...Option) *Comms {
 	}
 
 	return comms
+}
+
+func addTokenToURL(baseURL, token string) (string, error) {
+	if token == "" {
+		return "", newMissingRequiredFieldError("token")
+	}
+
+	base, err := url.Parse(baseURL)
+	if err != nil {
+		return "", err
+	}
+
+	url := base.ResolveReference(&url.URL{RawQuery: url.Values{"token": []string{token}}.Encode()})
+
+	return url.String(), nil
 }

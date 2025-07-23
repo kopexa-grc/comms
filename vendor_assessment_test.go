@@ -18,9 +18,9 @@ func TestComms_SendVendorAssessmentEmail(t *testing.T) {
 		LastName:  "Mustermann",
 	}
 	data := VendorAssessmentData{
-		ActorName:       "Alice Example",
+		ActorName:        "Alice Example",
 		OrganizationName: "Acme GmbH",
-		AssessmentURL:   "https://app.kopexa.com/assessment/123",
+		AssessmentURL:    "https://app.kopexa.com/assessment/123",
 	}
 
 	comms := New(WithDriver(mock.NewDriver()))
@@ -51,12 +51,12 @@ func TestComms_SendVendorAssessmentEmail(t *testing.T) {
 func TestComms_SendVendorAssessmentEmail_InvalidRecipient(t *testing.T) {
 	recipient := Recipient{Email: ""}
 	data := VendorAssessmentData{
-		ActorName:       "Alice Example",
+		ActorName:        "Alice Example",
 		OrganizationName: "Acme GmbH",
-		AssessmentURL:   "https://app.kopexa.com/assessment/123",
+		AssessmentURL:    "https://app.kopexa.com/assessment/123",
 	}
 	comms := New(WithDriver(mock.NewDriver()))
 	err := comms.SendVendorAssessmentEmail(context.Background(), recipient, data)
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "invalid recipient")
-} 
+}

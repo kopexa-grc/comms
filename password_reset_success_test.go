@@ -44,4 +44,4 @@ func TestComms_SendPasswordResetSuccessEmail_InvalidRecipient(t *testing.T) {
 	err := comms.SendPasswordResetSuccessEmail(context.Background(), recipient)
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "invalid recipient")
-} 
+}
