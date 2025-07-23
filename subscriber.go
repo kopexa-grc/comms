@@ -18,6 +18,7 @@ const subscriptionBaseURL = "https://app.kopexa.com/subscriber-verify"
 
 func (c *Comms) SendNewSubscriber(ctx context.Context, r Recipient, token string) error {
 	var err error
+
 	data := subscriberEmailData{
 		CommonData: CommonData{
 			Subject:   "Thank you for subscribing",
