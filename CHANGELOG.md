@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/kopexa-grc/comms/compare/v1.1.0...v1.2.0) (2025-09-24)
+
+
+### Features
+
+* add review overdue email functionality with templates and sending logic ([b85225b](https://github.com/kopexa-grc/comms/commit/b85225b301cb6ac687c077fdb02754a495fded49))
+
+
+### Bug Fixes
+
+* format struct fields in ReviewOverdueData for consistency ([da2f731](https://github.com/kopexa-grc/comms/commit/da2f731667a28de4532c9bd1d6f795feecf244a8))
+
 ## [1.1.0](https://github.com/kopexa-grc/comms/compare/v1.0.0...v1.1.0) (2025-07-23)
 
 
