@@ -1,0 +1,31 @@
+Kopexa
+
+Action required ⚠️
+
+The {{ .Entity }} {{ .EntityName }} in {{ .Space }} is overdue for review.
+
+Please take a moment to review this entity and complete the outstanding check.
+
+Review Now {{ .Url }}
+
+Or copy this link into your browser:
+
+{{ .Url }}
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Unterjörn 19a
+24536 Neumünster
+Germany

@@ -11,6 +11,7 @@ import Welcome from "./auth/welcome";
 import OrgCreated from "./org/created";
 import OrgInvite from "./org/invite";
 import InviteAccepted from "./org/invite-accepted";
+import ReviewOverdue from "./review/review-overdue";
 import Subscribe from "./subscribe";
 
 export const templates = [
@@ -49,5 +50,9 @@ export const templates = [
   {
     component: Subscribe,
     name: "subscribe",
+  },
+  {
+    component: ReviewOverdue,
+    name: "review-overdue",
   },
 ] as const;
