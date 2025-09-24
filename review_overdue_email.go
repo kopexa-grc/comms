@@ -13,8 +13,8 @@ type ReviewOverdueData struct {
 	CommonData
 	Entity     string `json:"entity"`
 	EntityName string `json:"entity_name"`
-	Space 	string `json:"space"`
-	URL 	  string `json:"url"`
+	Space      string `json:"space"`
+	URL        string `json:"url"`
 }
 
 func (c *Comms) SendReviewOverdueEmail(ctx context.Context, r Recipient, data ReviewOverdueData) error {
