@@ -6,6 +6,7 @@
 import { VendorAssessmentRequest } from "./assessment/vendor-request";
 import ForgotPassword from "./auth/forgot-password";
 import PasswordResetSuccess from "./auth/password-reset-success";
+import RecoveryCodesRegenerated from "./auth/recovery-codes-regenerated";
 import { VerifyEmail } from "./auth/verify-email";
 import Welcome from "./auth/welcome";
 import OrgCreated from "./org/created";
@@ -54,5 +55,9 @@ export const templates = [
   {
     component: ReviewOverdue,
     name: "review-overdue",
+  },
+  {
+    component: RecoveryCodesRegenerated,
+    name: "recovery-codes-regenerated",
   },
 ] as const;
