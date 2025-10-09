@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.0](https://github.com/kopexa-grc/comms/compare/v1.2.0...v2.0.0) (2025-10-09)
+
+
+### ⚠ BREAKING CHANGES
+
+* bumped email templates to URL mode
+
+### Features
+
+* bumped email templates to URL mode ([48a85b3](https://github.com/kopexa-grc/comms/commit/48a85b31f89d30a05f9a604bc6f5f0bc71475377))
+* recovery codes regenerated email ([c04e673](https://github.com/kopexa-grc/comms/commit/c04e67366990655f65f60ac932991cddf5527f4a))
+
 ## [1.2.0](https://github.com/kopexa-grc/comms/compare/v1.1.0...v1.2.0) (2025-09-24)
 
 
