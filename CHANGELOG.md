@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/kopexa-grc/comms/compare/v2.0.0...v2.1.0) (2025-10-09)
+
+
+### Features
+
+* bumped to v2 ([fb5b995](https://github.com/kopexa-grc/comms/commit/fb5b9950fa9b0228702489f18213fd4ea93a7abd))
+
 ## [2.0.0](https://github.com/kopexa-grc/comms/compare/v1.2.0...v2.0.0) (2025-10-09)
 
 
