@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/kopexa-grc/comms/compare/v2.1.0...v2.1.1) (2025-10-09)
+
+
+### Bug Fixes
+
+* correct url parsing ([dce10aa](https://github.com/kopexa-grc/comms/commit/dce10aa83419a2f0732fd7834d46ec9566684bf6))
+
 ## [2.1.0](https://github.com/kopexa-grc/comms/compare/v2.0.0...v2.1.0) (2025-10-09)
 
 
