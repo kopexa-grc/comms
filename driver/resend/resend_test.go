@@ -12,8 +12,8 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/kopexa-grc/comms/driver"
-	impl "github.com/kopexa-grc/comms/driver/resend"
+	"github.com/kopexa-grc/comms/v2/driver"
+	impl "github.com/kopexa-grc/comms/v2/driver/resend"
 	"github.com/resend/resend-go/v2"
 	"github.com/stretchr/testify/require"
 )

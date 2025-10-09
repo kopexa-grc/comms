@@ -8,7 +8,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 	"github.com/stretchr/testify/require"
 )
 

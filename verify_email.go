@@ -6,7 +6,7 @@ package comms
 import (
 	"context"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 )
 
 type verifyEmailData struct {

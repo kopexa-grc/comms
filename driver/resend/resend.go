@@ -10,7 +10,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 	"github.com/resend/resend-go/v2"
 )
 

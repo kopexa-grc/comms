@@ -7,7 +7,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 )
 
 var (

@@ -7,7 +7,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 )
 
 // Driver is a mock implementation of the driver.Driver interface

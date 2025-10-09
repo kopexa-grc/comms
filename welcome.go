@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 )
 
 // SendWelcomeEmail sends a welcome email to a recipient after successful email verification.

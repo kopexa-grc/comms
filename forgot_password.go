@@ -7,7 +7,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/kopexa-grc/comms/driver"
+	"github.com/kopexa-grc/comms/v2/driver"
 )
 
 // SendForgotPasswordEmail sends a password reset email to a recipient.

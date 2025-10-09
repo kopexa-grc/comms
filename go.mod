@@ -1,4 +1,4 @@
-module github.com/kopexa-grc/comms
+module github.com/kopexa-grc/comms/v2
 
 go 1.24.3
 

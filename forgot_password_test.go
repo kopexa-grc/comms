@@ -7,7 +7,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/kopexa-grc/comms/driver/mock"
+	"github.com/kopexa-grc/comms/v2/driver/mock"
 	"github.com/stretchr/testify/require"
 )
 
