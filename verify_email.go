@@ -5,14 +5,15 @@ package comms
 
 import (
 	"context"
+	"html/template"
 
 	"github.com/kopexa-grc/comms/v2/driver"
 )
 
 type verifyEmailData struct {
 	CommonData
-	DisplayName string `json:"display_name"`
-	URL         string `json:"URL"`
+	DisplayName string       `json:"display_name"`
+	URL         template.URL `json:"URL"`
 }
 
 func (c *Comms) SendVerifyEmail(ctx context.Context, r Recipient, url string) error {
@@ -22,7 +23,7 @@ func (c *Comms) SendVerifyEmail(ctx context.Context, r Recipient, url string) er
 			Recipient: r,
 		},
 		DisplayName: r.Name(),
-		URL:         url,
+		URL:         template.URL(url), // nolint:gosec
 	}
 
 	msg, err := c.newVerifyEmail(data)

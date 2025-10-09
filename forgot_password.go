@@ -7,6 +7,8 @@ import (
 	"context"
 	"fmt"
 
+	"html/template"
+
 	"github.com/kopexa-grc/comms/v2/driver"
 )
 
@@ -17,9 +19,9 @@ func (c *Comms) SendForgotPasswordEmail(ctx context.Context, recipient Recipient
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("forgot-password", map[string]string{
+	text, html, err := Render("forgot-password", map[string]any{
 		"DisplayName": recipient.Name(),
-		"URL":         url,
+		"URL":         template.URL(url), // nolint:gosec
 	})
 	if err != nil {
 		return fmt.Errorf("failed to render forgot password email: %w", err)
