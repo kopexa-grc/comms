@@ -12,17 +12,17 @@ import (
 type verifyEmailData struct {
 	CommonData
 	DisplayName string `json:"display_name"`
-	Code        string `json:"code"`
+	URL         string `json:"URL"`
 }
 
-func (c *Comms) SendVerifyEmail(ctx context.Context, r Recipient, code string) error {
+func (c *Comms) SendVerifyEmail(ctx context.Context, r Recipient, url string) error {
 	data := verifyEmailData{
 		CommonData: CommonData{
 			Subject:   "Verify your email address",
 			Recipient: r,
 		},
 		DisplayName: r.Name(),
-		Code:        code,
+		URL:         url,
 	}
 
 	msg, err := c.newVerifyEmail(data)

@@ -5,10 +5,14 @@ CONFIRM YOUR EMAIL ADDRESS
 
 Hello {{ .DisplayName}},
 
-Your confirmation code is below - enter it in your open browser window and we'll
-help you get signed in.
+Please confirm your email address by clicking the button below. Once verified,
+you’ll be able to securely access your Kopexa account.
 
-{{ .Code }}
+Verify Email Address {{ .URL }}
+
+Or copy and paste this link into your browser:
+
+{{ .URL }}
 
 If you didn't request this email, there's nothing to worry about, you can safely
 ignore it.

@@ -18,13 +18,13 @@ func TestComms_SendVerifyEmail(t *testing.T) {
 		FirstName: "Max",
 		LastName:  "Mustermann",
 	}
-	code := "123456"
+	URL := "Token"
 
 	// Create Comms instance with mock driver
 	comms := New(WithDriver(mock.NewDriver()))
 
 	// Test sending
-	err := comms.SendVerifyEmail(context.Background(), recipient, code)
+	err := comms.SendVerifyEmail(context.Background(), recipient, URL)
 	require.NoError(t, err)
 
 	// Get the last sent message
@@ -38,12 +38,12 @@ func TestComms_SendVerifyEmail(t *testing.T) {
 
 	// Verify text content
 	require.NotEmpty(t, msg.Text)
-	require.Contains(t, msg.Text, code)
+	require.Contains(t, msg.Text, URL)
 	require.Contains(t, msg.Text, recipient.Name())
 
 	// Verify HTML content
 	require.NotEmpty(t, msg.HTML)
-	require.Contains(t, msg.HTML, code)
+	require.Contains(t, msg.HTML, URL)
 	require.Contains(t, msg.HTML, recipient.Name())
 	require.Contains(t, msg.HTML, "<!DOCTYPE html PUBLIC")
 }

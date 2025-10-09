@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: BUSL-1.1
  */
 
-import { Heading, Section, Text } from "@react-email/components";
+import { Button, Heading, Section, Text } from "@react-email/components";
 import { Base } from "../partials/base";
 import { Container } from "../partials/container";
 import { Header } from "../partials/header";
@@ -11,11 +11,11 @@ import { Box } from "../partials/box";
 
 type VerifyEmailProps = {
   displayName?: string;
-  code?: string;
+  URL?: string;
 };
 
 export function VerifyEmail(props: VerifyEmailProps) {
-  const { displayName = "{{ .DisplayName}}", code = "{{ .Code }}" } = props;
+  const { displayName = "{{ .DisplayName}}", URL = "{{ .URL }}" } = props;
 
   return (
     <Base preview="Verify your email address">
@@ -27,17 +27,28 @@ export function VerifyEmail(props: VerifyEmailProps) {
             Hello {displayName},
           </Text>
           <Text className="text-lg leading-snug mb-7">
-            Your confirmation code is below - enter it in your open browser
-            window and we'll help you get signed in.
+            Please confirm your email address by clicking the button below. Once
+            verified, you’ll be able to securely access your Kopexa account.
           </Text>
         </Box>
         <Box>
-          <Section className="flex justify-center items-center px-4 py-6 bg-slate-100 rounded-md ">
-            <Text className=" text-3xl text-center align-middle font-bold">
-              {code}
-            </Text>
+          <Section className="flex justify-center items-center px-4 py-6">
+            <Button
+              href={URL}
+              className="bg-blue-600 text-white px-6 py-3 rounded font-bold my-4 hover:bg-blue-700"
+            >
+              Verify Email Address
+            </Button>
           </Section>
         </Box>
+
+        <Box className="text-start mt-4">
+          <Text className="text-sm leading-tight">
+            Or copy and paste this link into your browser:
+          </Text>
+          <Text className="text-xs text-slate-600 break-all mt-2">{URL}</Text>
+        </Box>
+
         <Box className="text-start">
           <Text className="text-sm leading-tight">
             If you didn't request this email, there's nothing to worry about,
@@ -48,5 +59,9 @@ export function VerifyEmail(props: VerifyEmailProps) {
     </Base>
   );
 }
+
+VerifyEmail.PreviewProps = {
+  URL: "https://app.kopexa.com/auth/verify-email?token=OilPEqoZpsQ1NOJE7YlHkjpjh_zFsQm-vY5DwV9hXWg",
+};
 
 export default VerifyEmail;

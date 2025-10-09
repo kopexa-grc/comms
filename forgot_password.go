@@ -12,14 +12,14 @@ import (
 
 // SendForgotPasswordEmail sends a password reset email to a recipient.
 // The email contains a one-time code that can be used to reset the password.
-func (c *Comms) SendForgotPasswordEmail(ctx context.Context, recipient Recipient, code string) error {
+func (c *Comms) SendForgotPasswordEmail(ctx context.Context, recipient Recipient, url string) error {
 	if err := recipient.Validate(); err != nil {
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
 	text, html, err := Render("forgot-password", map[string]string{
 		"DisplayName": recipient.Name(),
-		"Code":        code,
+		"URL":         url,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to render forgot password email: %w", err)
