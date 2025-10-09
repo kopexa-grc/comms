@@ -18,13 +18,13 @@ func TestComms_SendForgotPasswordEmail(t *testing.T) {
 		FirstName: "Max",
 		LastName:  "Mustermann",
 	}
-	code := "123456"
+	url := "http://localhost:3000/auth/password-reset?token=FGzm0xBF2HzdaGfql0HHqzm2PRDzPOQHSgW2fFQ3n6M"
 
 	// Create Comms instance with mock driver
 	comms := New(WithDriver(mock.NewDriver()))
 
 	// Test sending
-	err := comms.SendForgotPasswordEmail(context.Background(), recipient, code)
+	err := comms.SendForgotPasswordEmail(context.Background(), recipient, url)
 	require.NoError(t, err)
 
 	// Get the last sent message
@@ -39,12 +39,12 @@ func TestComms_SendForgotPasswordEmail(t *testing.T) {
 	// Verify text content
 	require.NotEmpty(t, msg.Text)
 	require.Contains(t, msg.Text, recipient.Name())
-	require.Contains(t, msg.Text, code)
+	require.Contains(t, msg.Text, url)
 
 	// Verify HTML content
 	require.NotEmpty(t, msg.HTML)
 	require.Contains(t, msg.HTML, recipient.Name())
-	require.Contains(t, msg.HTML, code)
+	require.Contains(t, msg.HTML, url)
 	require.Contains(t, msg.HTML, "<!DOCTYPE html PUBLIC")
 }
 
