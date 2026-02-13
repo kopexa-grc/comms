@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/kopexa-grc/comms/compare/v2.1.1...v2.2.0) (2026-02-13)
+
+
+### Features
+
+* add vendor survey OTP email template and SendSurveyOTP function ([967083e](https://github.com/kopexa-grc/comms/commit/967083ee16150f65046c80fcd8395275fb710ac2))
+
+
+### Bug Fixes
+
+* Update company address in email templates and vendor survey ([c2acd21](https://github.com/kopexa-grc/comms/commit/c2acd21baad5ceed43ce18a856b69d9f17f2c6e8))
+
 ## [2.1.1](https://github.com/kopexa-grc/comms/compare/v2.1.0...v2.1.1) (2025-10-09)
 
 
