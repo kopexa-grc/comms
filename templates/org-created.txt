@@ -33,6 +33,6 @@ organization settings.
 --------------------------------------------------------------------------------
 
 Kopexa GmbH
-Winsener Str. 69
-21077 Hamburg
+Schauenburgerstr. 116
+24118 Kiel
 Germany
