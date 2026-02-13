@@ -30,9 +30,9 @@ export const Footer = () => {
         <Text>
           Kopexa GmbH
           <br />
-          Winsener Str. 69
+          Schauenburgerstr. 116
           <br />
-          21077 Hamburg
+          24118 Kiel
           <br />
           Germany
         </Text>

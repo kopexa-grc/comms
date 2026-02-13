@@ -4,6 +4,7 @@
  */
 
 import { VendorAssessmentRequest } from "./assessment/vendor-request";
+import { VendorSurveyOtp } from "./assessment/vendor-survey-otp";
 import ForgotPassword from "./auth/forgot-password";
 import PasswordResetSuccess from "./auth/password-reset-success";
 import RecoveryCodesRegenerated from "./auth/recovery-codes-regenerated";
@@ -47,6 +48,10 @@ export const templates = [
   {
     component: VendorAssessmentRequest,
     name: "vendor-assessment-request",
+  },
+  {
+    component: VendorSurveyOtp,
+    name: "vendor-survey-otp",
   },
   {
     component: Subscribe,

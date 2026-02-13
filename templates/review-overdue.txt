@@ -26,6 +26,6 @@ organization settings.
 --------------------------------------------------------------------------------
 
 Kopexa GmbH
-Unterjörn 19a
-24536 Neumünster
+Winsener Str. 69
+21077 Hamburg
 Germany

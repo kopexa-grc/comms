@@ -1,23 +1,25 @@
 Kopexa
 
 
-WELCOME TO {{ .ORGNAME }}!
+YOUR TWO-FACTOR RECOVERY CODES WERE RE-GENERATED
 
 Hello {{ .DisplayName }},
 
-Congratulations! Your organization has been successfully created. You're now
-ready to start building your team and managing your resources.
+We’re letting you know that your two-factor authentication (2FA) recovery codes
+were re-generated. For security reasons, we do not include the codes in this
+email.
 
-Next steps:
+Please store your new recovery codes in a safe place. You can review or download
+them from your account’s security settings:
 
-1. Invite team members to join your organization
+Review Security Settings {{ .URL }}
 
-2. Set up your organization's settings and preferences
+If this wasn’t you, we recommend resetting your password and reviewing recent
+activity.
 
-3. Configure your first space and resources
+For your security, recovery codes are only shown after you sign in.
 
-We're excited to have you on board and can't wait to see what you'll build with
-Kopexa!
+If you didn’t request this change, please contact support immediately.
 
 You are receiving this email because your organization is using Kopexa or has
 interacted with our services. This message may contain important updates
