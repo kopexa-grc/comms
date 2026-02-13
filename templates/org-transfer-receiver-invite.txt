@@ -1,0 +1,41 @@
+Kopexa
+
+Organization Ownership Transfer Invitation
+
+Hello {{ .DisplayName }},
+
+{{ .SenderName }} ({{ .SenderEmail }}) has invited you to become the new owner of
+{{ .Organization }} on Kopexa.
+
+To accept this ownership transfer, please click the link below or copy it into
+your browser:
+
+{{ .Url }}
+
+IMPORTANT: By accepting this transfer, you will become the full owner of
+{{ .Organization }} with complete administrative control over the organization,
+its members, and all associated data.
+
+This link will expire in 3 days.
+
+If you do not wish to accept this transfer, you can simply ignore this email.
+
+--------------------------------------------------------------------------------
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

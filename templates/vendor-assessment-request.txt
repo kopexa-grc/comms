@@ -37,6 +37,6 @@ organization settings.
 --------------------------------------------------------------------------------
 
 Kopexa GmbH
-Schauenburgerstr. 116
+Schauenburgerstraße 116
 24118 Kiel
 Germany
