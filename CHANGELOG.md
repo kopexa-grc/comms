@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/kopexa-grc/comms/compare/v2.2.0...v2.3.0) (2026-02-14)
+
+
+### Features
+
+* add organization transfer email support ([be66cf4](https://github.com/kopexa-grc/comms/commit/be66cf4879b205d0269fbc93f9fc11e41303e215))
+
 ## [2.2.0](https://github.com/kopexa-grc/comms/compare/v2.1.1...v2.2.0) (2026-02-13)
 
 
