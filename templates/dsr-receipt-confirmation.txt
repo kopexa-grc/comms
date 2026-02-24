@@ -8,7 +8,6 @@ received your data subject request.
 REQUEST DETAILS
 ---------------
 Reference Number: {{ .DisplayID }}
-Request Type(s): {{ .RequestTypes }}
 Date Received: {{ .ReceivedAt }}
 
 WHAT HAPPENS NEXT

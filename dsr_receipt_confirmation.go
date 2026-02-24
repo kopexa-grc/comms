@@ -18,8 +18,6 @@ type DsrReceiptConfirmationData struct {
 	DisplayID string `json:"display_id"`
 	// AffectedPersonName is the full name of the data subject
 	AffectedPersonName string `json:"affected_person_name"`
-	// RequestTypes is a human-readable list of request types (e.g., "Data Access, Data Deletion")
-	RequestTypes string `json:"request_types"`
 	// ReceivedAt is the formatted date when the request was received
 	ReceivedAt string `json:"received_at"`
 	// ContactEmail is the email address for inquiries about the request
