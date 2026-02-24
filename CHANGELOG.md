@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.0](https://github.com/kopexa-grc/comms/compare/v2.3.0...v2.4.0) (2026-02-24)
+
+
+### Features
+
+* add data subject request receipt confirmation email ([d535265](https://github.com/kopexa-grc/comms/commit/d5352651bd99299783c3909fc19d55fcdfb6cb79))
+* add incident deadline reminder and overdue email templates ([375005a](https://github.com/kopexa-grc/comms/commit/375005a8cf146c50f2d10d1a4967258147bcd295))
+
 ## [2.3.0](https://github.com/kopexa-grc/comms/compare/v2.2.0...v2.3.0) (2026-02-14)
 
 
