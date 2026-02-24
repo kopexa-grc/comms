@@ -1,0 +1,36 @@
+Data Subject Request - Receipt Confirmation
+
+Dear {{ .AffectedPersonName }},
+
+We are writing on behalf of {{ .OrganizationName }} to confirm that we have
+received your data subject request.
+
+REQUEST DETAILS
+---------------
+Reference Number: {{ .DisplayID }}
+Request Type(s): {{ .RequestTypes }}
+Date Received: {{ .ReceivedAt }}
+
+WHAT HAPPENS NEXT
+-----------------
+Your request is now being processed. We will review your request and respond
+within the timeframe required by applicable data protection regulations.
+
+If we need any additional information to process your request, we will contact
+you at the email address you provided.
+
+QUESTIONS?
+----------
+If you have any questions about your request or need to provide additional
+information, please contact us at {{ .ContactEmail }} and reference your
+request number {{ .DisplayID }}.
+
+Thank you for your patience.
+
+Best regards,
+{{ .OrganizationName }}
+
+--------------------------------------------------------------------------------
+
+This email was sent by {{ .OrganizationName }} in response to your data subject
+request. Please do not reply directly to this email.
