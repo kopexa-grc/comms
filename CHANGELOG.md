@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/kopexa-grc/comms/compare/v2.4.0...v2.4.1) (2026-02-24)
+
+
+### Bug Fixes
+
+* use correct URL field name in review-overdue templates ([fcb6e1b](https://github.com/kopexa-grc/comms/commit/fcb6e1b3c65dba8b93af925f611eb052ad269421))
+
 ## [2.4.0](https://github.com/kopexa-grc/comms/compare/v2.3.0...v2.4.0) (2026-02-24)
 
 
