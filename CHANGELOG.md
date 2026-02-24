@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.2](https://github.com/kopexa-grc/comms/compare/v2.4.1...v2.4.2) (2026-02-24)
+
+
+### Bug Fixes
+
+* remove RequestTypes from DSR receipt confirmation email ([166ddf8](https://github.com/kopexa-grc/comms/commit/166ddf8f2547afec8616f6ffcd2ce76dd7724323))
+
 ## [2.4.1](https://github.com/kopexa-grc/comms/compare/v2.4.0...v2.4.1) (2026-02-24)
 
 
