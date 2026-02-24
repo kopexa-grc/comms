@@ -1,0 +1,35 @@
+Kopexa
+
+Incident Reporting Deadline Approaching
+
+The incident "{{ .IncidentTitle }}" requires notification to authorities under {{ .Framework }} ({{ .FrameworkName }}).
+
+Deadline: {{ .Deadline }}
+Time remaining: {{ .TimeLeft }}
+Space: {{ .Space }}
+
+Please ensure the required notification is submitted before the deadline.
+
+View Incident: {{ .URL }}
+
+Or copy this link into your browser:
+
+{{ .URL }}
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

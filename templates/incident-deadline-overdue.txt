@@ -1,0 +1,35 @@
+Kopexa
+
+URGENT: Incident Reporting Deadline Overdue
+
+The incident "{{ .IncidentTitle }}" has missed the {{ .Framework }} ({{ .FrameworkName }}) reporting deadline.
+
+Deadline was: {{ .Deadline }}
+Time overdue: {{ .TimeOverdue }}
+Space: {{ .Space }}
+
+Immediate action is required. Please submit the required notification as soon as possible and document the reason for the delay.
+
+View Incident: {{ .URL }}
+
+Or copy this link into your browser:
+
+{{ .URL }}
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany
