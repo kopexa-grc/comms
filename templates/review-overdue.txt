@@ -6,11 +6,11 @@ The {{ .Entity }} {{ .EntityName }} in {{ .Space }} is overdue for review.
 
 Please take a moment to review this entity and complete the outstanding check.
 
-Review Now {{ .Url }}
+Review Now {{ .URL }}
 
 Or copy this link into your browser:
 
-{{ .Url }}
+{{ .URL }}
 
 You are receiving this email because your organization is using Kopexa or has
 interacted with our services. This message may contain important updates
