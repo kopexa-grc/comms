@@ -2,8 +2,8 @@ Data Subject Request - Receipt Confirmation
 
 Dear {{ .AffectedPersonName }},
 
-We are writing on behalf of {{ .OrganizationName }} to confirm that we have
-received your data subject request.
+On behalf of {{ .OrganizationName }}, we are pleased to confirm that your data
+subject request has been received.
 
 REQUEST DETAILS
 ---------------
@@ -21,8 +21,8 @@ you at the email address you provided.
 QUESTIONS?
 ----------
 If you have any questions about your request or need to provide additional
-information, please contact us at {{ .ContactEmail }} and reference your
-request number {{ .DisplayID }}.
+information, please contact {{ .ContactEmail }} and reference your request
+number {{ .DisplayID }}.
 
 Thank you for your patience.
 
@@ -31,5 +31,12 @@ Best regards,
 
 --------------------------------------------------------------------------------
 
-This email was sent by {{ .OrganizationName }} in response to your data subject
-request. Please do not reply directly to this email.
+This email was sent via Kopexa on behalf of {{ .OrganizationName }}.
+For questions about your request, please contact {{ .ContactEmail }}.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany
