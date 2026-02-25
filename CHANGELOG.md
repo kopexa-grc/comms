@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.3](https://github.com/kopexa-grc/comms/compare/v2.4.2...v2.4.3) (2026-02-25)
+
+
+### Bug Fixes
+
+* clarify Kopexa as sender in DSR receipt confirmation email ([9bf8f02](https://github.com/kopexa-grc/comms/commit/9bf8f02d992cf43e2b88490b801849c71cd9da76))
+
 ## [2.4.2](https://github.com/kopexa-grc/comms/compare/v2.4.1...v2.4.2) (2026-02-24)
 
 
