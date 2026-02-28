@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.4](https://github.com/kopexa-grc/comms/compare/v2.4.3...v2.4.4) (2026-02-28)
+
+
+### Bug Fixes
+
+* remove left border from request details box in DSR receipt confirmation ([c48d4eb](https://github.com/kopexa-grc/comms/commit/c48d4eb3e4975e3c68c93dc0e659abf6b976f0be))
+
 ## [2.4.3](https://github.com/kopexa-grc/comms/compare/v2.4.2...v2.4.3) (2026-02-25)
 
 
