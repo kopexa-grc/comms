@@ -40,4 +40,4 @@ Bei Fragen zu deiner Anfrage wende dich bitte an {{ .ContactEmail }}.
 Kopexa GmbH
 Schauenburgerstraße 116
 24118 Kiel
-Germany
+Deutschland
