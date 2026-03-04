@@ -15,10 +15,10 @@ type IncidentDeadlineReminderData struct {
 	CommonData
 	IncidentTitle string `json:"incident_title"`
 	IncidentID    string `json:"incident_id"`
-	Framework     string `json:"framework"`     // e.g., "GDPR", "DORA", "NIS2"
+	Framework     string `json:"framework"`      // e.g., "GDPR", "DORA", "NIS2"
 	FrameworkName string `json:"framework_name"` // e.g., "General Data Protection Regulation"
-	Deadline      string `json:"deadline"`      // formatted deadline time
-	TimeLeft      string `json:"time_left"`     // e.g., "2 hours", "30 minutes"
+	Deadline      string `json:"deadline"`       // formatted deadline time
+	TimeLeft      string `json:"time_left"`      // e.g., "2 hours", "30 minutes"
 	Space         string `json:"space"`
 	URL           string `json:"url"`
 }

@@ -63,7 +63,10 @@ func init() {
 }
 
 func parseTemplate(name string) *template.Template {
-	tmpl, err := template.New(name).Funcs(sprig.FuncMap()).ParseFS(files, filepath.Join(defaultTemplatesDir, name))
+	// ParseFS names templates by their base filename only, not the full path.
+	// So we need to use the base name for template.New() as well.
+	baseName := filepath.Base(name)
+	tmpl, err := template.New(baseName).Funcs(sprig.FuncMap()).ParseFS(files, filepath.Join(defaultTemplatesDir, name))
 	if err != nil {
 		log.Fatal().Err(err).Str("template", name).Msg("could not parse template")
 	}

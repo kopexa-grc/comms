@@ -15,10 +15,10 @@ type IncidentDeadlineOverdueData struct {
 	CommonData
 	IncidentTitle string `json:"incident_title"`
 	IncidentID    string `json:"incident_id"`
-	Framework     string `json:"framework"`     // e.g., "GDPR", "DORA", "NIS2"
+	Framework     string `json:"framework"`      // e.g., "GDPR", "DORA", "NIS2"
 	FrameworkName string `json:"framework_name"` // e.g., "General Data Protection Regulation"
-	Deadline      string `json:"deadline"`      // formatted deadline time
-	TimeOverdue   string `json:"time_overdue"`  // e.g., "2 hours", "1 day"
+	Deadline      string `json:"deadline"`       // formatted deadline time
+	TimeOverdue   string `json:"time_overdue"`   // e.g., "2 hours", "1 day"
 	Space         string `json:"space"`
 	URL           string `json:"url"`
 }

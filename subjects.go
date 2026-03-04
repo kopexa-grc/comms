@@ -26,8 +26,8 @@ var subjects = map[string]map[string]string{
 		"de": "Deine Organisation wurde erstellt",
 	},
 	"org-invite": {
-		"en": "You have been invited to join %s on Kopexa",
-		"de": "Du wurdest eingeladen, %s auf Kopexa beizutreten",
+		"en": "%s has invited you to join %s on Kopexa",
+		"de": "%s hat dich eingeladen, %s auf Kopexa beizutreten",
 	},
 	"org-invite-accepted": {
 		"en": "%s has accepted your invitation to join %s",
@@ -86,7 +86,9 @@ func Subject(template, lang string) string {
 		if subj, ok := s[lang]; ok {
 			return subj
 		}
+
 		return s["en"]
 	}
+
 	return ""
 }
