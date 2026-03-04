@@ -1,5 +1,20 @@
 # Changelog
 
+## [2.5.0](https://github.com/kopexa-grc/comms/compare/v2.4.4...v2.5.0) (2026-03-04)
+
+
+### Features
+
+* add i18n support for email subjects ([7ff7252](https://github.com/kopexa-grc/comms/commit/7ff7252e00ca6ca0555f2317a50a3bf25036dd53))
+* add i18n support for email templates ([5f57092](https://github.com/kopexa-grc/comms/commit/5f5709241e54f299ac1c40b0d3ded2cb847533ef))
+* add review-pending email template ([36b5939](https://github.com/kopexa-grc/comms/commit/36b5939c243463647559213cfc9b059cf0985598))
+
+
+### Bug Fixes
+
+* correct template parsing and org-invite subject ([cd5ca4d](https://github.com/kopexa-grc/comms/commit/cd5ca4df1b1c8cf8c452fae177126d0be276428e))
+* **i18n:** replace Germany with Deutschland in de templates ([7c951de](https://github.com/kopexa-grc/comms/commit/7c951dee8f00f90790990dabecc3468ccbe7864d))
+
 ## [2.4.4](https://github.com/kopexa-grc/comms/compare/v2.4.3...v2.4.4) (2026-02-28)
 
 
