@@ -32,7 +32,7 @@ func (c *Comms) SendReviewOverdueEmail(ctx context.Context, r Recipient, data Re
 }
 
 func (c *Comms) newReviewOverdueEmail(data ReviewOverdueData) (driver.Message, error) {
-	text, html, err := Render("review-overdue", data)
+	text, html, err := Render(data.Recipient.Lang(), "review-overdue", data)
 	if err != nil {
 		return driver.Message{}, err
 	}

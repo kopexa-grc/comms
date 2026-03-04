@@ -1,0 +1,43 @@
+Bestätigung des Eingangs einer Betroffenenanfrage
+
+Hallo {{ .AffectedPersonName }},
+
+im Namen von {{ .OrganizationName }} bestätigen wir hiermit den Eingang deiner
+Betroffenenanfrage.
+
+DETAILS DER ANFRAGE
+-------------------
+Referenznummer: {{ .DisplayID }}
+Eingangsdatum: {{ .ReceivedAt }}
+
+WIE GEHT ES WEITER
+------------------
+Deine Anfrage wird jetzt bearbeitet. Wir werden deine Anfrage prüfen und
+innerhalb der gesetzlich vorgeschriebenen Frist gemäß den geltenden
+Datenschutzbestimmungen antworten.
+
+Falls wir zusätzliche Informationen zur Bearbeitung deiner Anfrage benötigen,
+werden wir dich unter der von dir angegebenen E-Mail-Adresse kontaktieren.
+
+FRAGEN?
+-------
+Bei Fragen zu deiner Anfrage oder falls du zusätzliche Informationen bereit-
+stellen möchtest, kontaktiere bitte {{ .ContactEmail }} unter Angabe deiner
+Referenznummer {{ .DisplayID }}.
+
+Vielen Dank für deine Geduld.
+
+Mit freundlichen Grüßen,
+{{ .OrganizationName }}
+
+--------------------------------------------------------------------------------
+
+Diese E-Mail wurde über Kopexa im Namen von {{ .OrganizationName }} gesendet.
+Bei Fragen zu deiner Anfrage wende dich bitte an {{ .ContactEmail }}.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

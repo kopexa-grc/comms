@@ -1,0 +1,35 @@
+Kopexa
+
+
+DANKE FÜR DEINE ANMELDUNG!
+
+Vielen Dank für deine Anmeldung bei Kopexa - um den Anmeldeprozess
+abzuschließen, bestätige bitte deine E-Mail-Adresse, indem du auf den folgenden
+Link klickst:
+
+Anmeldung bestätigen {{ .URL }}
+
+Falls der Link nicht funktioniert, kopiere diese URL in deinen Browser:
+
+{{ .URL }}
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

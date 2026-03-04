@@ -24,7 +24,7 @@ func (c *Comms) SendInviteEmail(ctx context.Context, recipient Recipient, data I
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("org-invite", map[string]string{
+	text, html, err := Render(recipient.Lang(), "org-invite", map[string]string{
 		"Actor":        data.Actor,
 		"ActorEmail":   data.ActorEmail,
 		"Organization": data.Organization,

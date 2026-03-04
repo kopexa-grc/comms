@@ -1,0 +1,42 @@
+Kopexa
+
+Anfrage zur Lieferantenbewertung
+
+Hallo {{ .DisplayName }},
+
+{{ .ActorName }} von {{ .OrganizationName }} hat dich gebeten, eine
+Lieferantenbewertung auszufüllen. Diese Bewertung hilft uns sicherzustellen,
+dass unsere Lieferanten unsere Qualitäts- und Compliance-Standards erfüllen.
+
+Bitte klicke auf den folgenden Link, um den Bewertungsprozess zu starten. Die
+Bewertung dauert etwa 15-20 Minuten.
+
+Bewertung starten {{ .AssessmentUrl }}
+
+Falls der Link nicht funktioniert, kopiere diese URL in deinen Browser:
+
+{{ .AssessmentUrl }}
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese Bewertung ist ein wichtiger Teil unseres Lieferantenmanagement-Prozesses
+und hilft uns, hohe Qualitäts- und Compliance-Standards aufrechtzuerhalten.
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

@@ -19,7 +19,7 @@ func (c *Comms) SendForgotPasswordEmail(ctx context.Context, recipient Recipient
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("forgot-password", map[string]any{
+	text, html, err := Render(recipient.Lang(), "forgot-password", map[string]any{
 		"DisplayName": recipient.Name(),
 		"URL":         template.URL(url), // nolint:gosec
 	})

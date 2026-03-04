@@ -38,7 +38,7 @@ func (c *Comms) SendIncidentDeadlineReminderEmail(ctx context.Context, r Recipie
 }
 
 func (c *Comms) newIncidentDeadlineReminderEmail(data IncidentDeadlineReminderData) (driver.Message, error) {
-	text, html, err := Render("incident-deadline-reminder", data)
+	text, html, err := Render(data.Recipient.Lang(), "incident-deadline-reminder", data)
 	if err != nil {
 		return driver.Message{}, err
 	}

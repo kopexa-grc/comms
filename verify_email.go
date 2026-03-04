@@ -35,7 +35,7 @@ func (c *Comms) SendVerifyEmail(ctx context.Context, r Recipient, url string) er
 }
 
 func (c *Comms) newVerifyEmail(data verifyEmailData) (driver.Message, error) {
-	text, html, err := Render("verify-email", data)
+	text, html, err := Render(data.Recipient.Lang(), "verify-email", data)
 	if err != nil {
 		return driver.Message{}, err
 	}

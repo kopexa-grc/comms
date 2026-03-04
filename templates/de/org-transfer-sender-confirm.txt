@@ -1,0 +1,42 @@
+Kopexa
+
+Bestätigung der Organisationsübertragung
+
+Hallo {{ .DisplayName }},
+
+du hast eine Übertragung der Eigentümerschaft für {{ .Organization }} an
+{{ .ReceiverName }} ({{ .ReceiverEmail }}) eingeleitet.
+
+Um diese Übertragung zu bestätigen, klicke bitte auf den folgenden Link oder
+kopiere ihn in deinen Browser:
+
+{{ .Url }}
+
+WICHTIG: Diese Aktion überträgt die vollständige Eigentümerschaft der
+Organisation. Sobald der Empfänger akzeptiert, bist du nicht mehr der
+Eigentümer und erhältst eine Mitgliederrolle.
+
+Dieser Link läuft in 3 Tagen ab.
+
+Falls du diese Übertragung nicht eingeleitet hast, ignoriere bitte diese E-Mail
+oder kontaktiere sofort unser Support-Team.
+
+--------------------------------------------------------------------------------
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

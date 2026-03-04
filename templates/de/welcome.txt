@@ -1,0 +1,34 @@
+Kopexa
+
+
+WILLKOMMEN BEI KOPEXA!
+
+Hallo {{ .DisplayName }},
+
+Wir freuen uns, dich an Bord zu haben! Deine E-Mail-Adresse wurde erfolgreich
+verifiziert und dein Konto ist jetzt einsatzbereit.
+
+Du bist jetzt Teil unserer Community und wir freuen uns darauf, dir zu helfen,
+das Beste aus deiner Kopexa-Erfahrung zu machen. Ob du hier bist, um deinen
+Workflow zu optimieren, deine Produktivität zu steigern oder neue Möglichkeiten
+zu entdecken – wir unterstützen dich dabei.
+
+Willkommen im Team!
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

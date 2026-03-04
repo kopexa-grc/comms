@@ -15,10 +15,13 @@ import (
 
 const (
 	defaultTemplatesDir = "templates"
+	// DefaultLanguage is the fallback language when a template is not found
+	// in the requested language.
+	DefaultLanguage = "en"
 )
 
 var (
-	//go:embed templates/*
+	//go:embed templates/en/* templates/de/*
 	files embed.FS
 
 	templates map[string]*template.Template
@@ -27,17 +30,35 @@ var (
 func init() {
 	templates = make(map[string]*template.Template)
 
-	templateFiles, err := fs.ReadDir(files, defaultTemplatesDir)
+	// Read language directories
+	langDirs, err := fs.ReadDir(files, defaultTemplatesDir)
 	if err != nil {
-		log.Panic().Err(err).Msg("could not read template files")
+		log.Panic().Err(err).Msg("could not read template directories")
 	}
 
-	for _, file := range templateFiles {
-		if file.IsDir() {
+	for _, langDir := range langDirs {
+		if !langDir.IsDir() {
 			continue
 		}
 
-		templates[file.Name()] = parseTemplate(file.Name())
+		lang := langDir.Name()
+		langPath := filepath.Join(defaultTemplatesDir, lang)
+
+		templateFiles, err := fs.ReadDir(files, langPath)
+		if err != nil {
+			log.Error().Err(err).Str("lang", lang).Msg("could not read language template directory")
+			continue
+		}
+
+		for _, file := range templateFiles {
+			if file.IsDir() {
+				continue
+			}
+
+			// Key format: "en/verify-email.txt"
+			key := filepath.Join(lang, file.Name())
+			templates[key] = parseTemplate(key)
+		}
 	}
 }
 

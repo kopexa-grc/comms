@@ -32,7 +32,7 @@ func (c *Comms) SendTransferSenderConfirmEmail(ctx context.Context, recipient Re
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("org-transfer-sender-confirm", map[string]string{
+	text, html, err := Render(recipient.Lang(), "org-transfer-sender-confirm", map[string]string{
 		"Organization":  data.Organization,
 		"ReceiverName":  data.ReceiverName,
 		"ReceiverEmail": data.ReceiverEmail,
@@ -64,7 +64,7 @@ func (c *Comms) SendTransferReceiverInviteEmail(ctx context.Context, recipient R
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("org-transfer-receiver-invite", map[string]string{
+	text, html, err := Render(recipient.Lang(), "org-transfer-receiver-invite", map[string]string{
 		"Organization": data.Organization,
 		"SenderName":   data.SenderName,
 		"SenderEmail":  data.SenderEmail,

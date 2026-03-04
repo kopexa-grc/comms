@@ -1,0 +1,38 @@
+Kopexa
+
+
+WILLKOMMEN BEI {{ .ORGNAME }}!
+
+Hallo {{ .DisplayName }},
+
+Herzlichen Glückwunsch! Deine Organisation wurde erfolgreich erstellt. Du kannst
+jetzt damit beginnen, dein Team aufzubauen und deine Ressourcen zu verwalten.
+
+Nächste Schritte:
+
+1. Lade Teammitglieder ein, deiner Organisation beizutreten
+
+2. Richte die Einstellungen und Präferenzen deiner Organisation ein
+
+3. Konfiguriere deinen ersten Space und deine Ressourcen
+
+Wir freuen uns, dich an Bord zu haben und sind gespannt, was du mit Kopexa
+aufbauen wirst!
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

@@ -1,0 +1,32 @@
+Kopexa
+
+Gute Neuigkeiten!
+
+{{ .InviteeName }} hat deine Einladung angenommen und ist der Organisation
+"{{ .Organization }}" auf Kopexa beigetreten.
+
+Du kannst jetzt Verantwortlichkeiten zuweisen, Zugang zu Spaces gewähren oder
+Bewertungen teilen.
+
+Teammitglieder verwalten https://app.kopexa.com/org/members
+
+Du erhältst diese E-Mail, weil du {{ .InviteeName }} eingeladen hast, deiner
+Organisation beizutreten.
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

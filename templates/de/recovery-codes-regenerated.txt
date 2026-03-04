@@ -1,0 +1,43 @@
+Kopexa
+
+
+DEINE ZWEI-FAKTOR-WIEDERHERSTELLUNGSCODES WURDEN NEU GENERIERT
+
+Hallo {{ .DisplayName }},
+
+wir möchten dich informieren, dass deine Zwei-Faktor-Authentifizierung (2FA)
+Wiederherstellungscodes neu generiert wurden. Aus Sicherheitsgründen enthalten
+wir die Codes nicht in dieser E-Mail.
+
+Bitte bewahre deine neuen Wiederherstellungscodes an einem sicheren Ort auf.
+Du kannst sie in den Sicherheitseinstellungen deines Kontos einsehen oder
+herunterladen:
+
+Sicherheitseinstellungen ansehen {{ .URL }}
+
+Falls du diese Änderung nicht vorgenommen hast, empfehlen wir dir, dein
+Passwort zurückzusetzen und die letzten Aktivitäten zu überprüfen.
+
+Aus Sicherheitsgründen werden Wiederherstellungscodes nur nach der Anmeldung
+angezeigt.
+
+Falls du diese Änderung nicht angefordert hast, kontaktiere bitte sofort den
+Support.
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

@@ -17,7 +17,7 @@ func (c *Comms) SendOrgCreatedEmail(ctx context.Context, recipient Recipient, or
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("org-created", map[string]string{
+	text, html, err := Render(recipient.Lang(), "org-created", map[string]string{
 		"DisplayName": recipient.Name(),
 		"OrgName":     orgName,
 		"ORGNAME":     orgName, // text compatibility

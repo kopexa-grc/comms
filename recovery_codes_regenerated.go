@@ -17,7 +17,7 @@ func (c *Comms) RecoveryCodesRegenerated(ctx context.Context, recipient Recipien
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("recovery-codes-regenerated", map[string]string{
+	text, html, err := Render(recipient.Lang(), "recovery-codes-regenerated", map[string]string{
 		"DisplayName": recipient.Name(),
 		"URL":         url,
 	})

@@ -16,7 +16,7 @@ func (c *Comms) SendPasswordResetSuccessEmail(ctx context.Context, recipient Rec
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("password-reset-success", map[string]string{
+	text, html, err := Render(recipient.Lang(), "password-reset-success", map[string]string{
 		"DisplayName": recipient.Name(),
 	})
 	if err != nil {

@@ -1,0 +1,35 @@
+Kopexa
+
+
+BESTÄTIGE DEINE E-MAIL-ADRESSE
+
+Hallo {{ .DisplayName}},
+
+bitte bestätige deine E-Mail-Adresse, indem du auf den folgenden Link klickst.
+Nach der Bestätigung kannst du sicher auf dein Kopexa-Konto zugreifen.
+
+E-Mail-Adresse bestätigen {{ .URL }}
+
+Oder kopiere diesen Link in deinen Browser:
+
+{{ .URL }}
+
+Falls du diese E-Mail nicht angefordert hast, kannst du sie einfach ignorieren.
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

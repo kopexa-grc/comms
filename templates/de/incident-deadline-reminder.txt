@@ -1,0 +1,37 @@
+Kopexa
+
+Meldefrist für Vorfall nähert sich
+
+Der Vorfall "{{ .IncidentTitle }}" erfordert eine Meldung an die Behörden gemäß
+{{ .Framework }} ({{ .FrameworkName }}).
+
+Frist: {{ .Deadline }}
+Verbleibende Zeit: {{ .TimeLeft }}
+Space: {{ .Space }}
+
+Bitte stelle sicher, dass die erforderliche Meldung vor Ablauf der Frist
+eingereicht wird.
+
+Vorfall ansehen: {{ .URL }}
+
+Oder kopiere diesen Link in deinen Browser:
+
+{{ .URL }}
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

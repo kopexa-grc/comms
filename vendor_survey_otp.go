@@ -21,7 +21,7 @@ func (c *Comms) SendSurveyOTP(ctx context.Context, recipientEmail, recipientName
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("vendor-survey-otp", map[string]string{
+	text, html, err := Render(recipient.Lang(), "vendor-survey-otp", map[string]string{
 		"DisplayName": recipient.Name(),
 		"OTPCode":     otpCode,
 		"ExpiresIn":   "5 minutes",

@@ -40,7 +40,7 @@ func (c *Comms) SendNewSubscriber(ctx context.Context, r Recipient, token string
 }
 
 func (c *Comms) newSubscriberEmail(data subscriberEmailData) (driver.Message, error) {
-	text, html, err := Render("subscribe", data)
+	text, html, err := Render(data.Recipient.Lang(), "subscribe", data)
 	if err != nil {
 		return driver.Message{}, err
 	}

@@ -1,0 +1,41 @@
+Kopexa
+
+Organisationsübertragung
+
+Hallo {{ .DisplayName }},
+
+{{ .SenderName }} ({{ .SenderEmail }}) möchte die Organisation
+{{ .Organization }} auf Kopexa an dich übertragen.
+
+Um die Organisation zu übernehmen, klicke bitte auf den folgenden Link oder
+kopiere ihn in deinen Browser:
+
+{{ .Url }}
+
+WICHTIG: Mit der Übernahme erhältst du die vollständige administrative Kontrolle
+über {{ .Organization }}, ihre Mitglieder und alle zugehörigen Daten.
+
+Dieser Link läuft in 3 Tagen ab.
+
+Falls du die Organisation nicht übernehmen möchtest, kannst du diese E-Mail
+einfach ignorieren.
+
+--------------------------------------------------------------------------------
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany

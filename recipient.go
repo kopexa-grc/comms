@@ -9,6 +9,12 @@ import (
 	"strings"
 )
 
+// SupportedLanguages defines the valid language codes for email templates.
+var SupportedLanguages = map[string]bool{
+	"en": true,
+	"de": true,
+}
+
 // Recipient represents an email recipient with their contact information.
 // It provides methods for validation and formatting of recipient data.
 type Recipient struct {
@@ -18,6 +24,8 @@ type Recipient struct {
 	FirstName string `json:"first_name"`
 	// LastName is the recipient's last name
 	LastName string `json:"last_name"`
+	// Language is the recipient's preferred language (e.g., "en", "de")
+	Language string `json:"language"`
 }
 
 var ErrEmailRequired = errors.New("email is required")
@@ -66,4 +74,15 @@ func (r Recipient) String() string {
 	}
 
 	return fmt.Sprintf("%s <%s>", r.Name(), strings.TrimSpace(r.Email))
+}
+
+// Lang returns the recipient's preferred language.
+// If the language is empty or not supported, it returns the default language (English).
+func (r Recipient) Lang() string {
+	lang := strings.ToLower(strings.TrimSpace(r.Language))
+	if lang == "" || !SupportedLanguages[lang] {
+		return DefaultLanguage
+	}
+
+	return lang
 }

@@ -17,7 +17,7 @@ func TestRender(t *testing.T) {
 	}
 
 	// Test both text and HTML rendering
-	text, html, err := Render("hello", data)
+	text, html, err := Render("", "hello", data)
 	if err != nil {
 		t.Errorf("Render failed: %v", err)
 	}
@@ -43,7 +43,7 @@ func TestRender(t *testing.T) {
 
 func TestRenderTemplateNotFound(t *testing.T) {
 	// Test with non-existent template
-	_, _, err := Render("nonexistent", nil)
+	_, _, err := Render("", "nonexistent", nil)
 	if err == nil {
 		t.Error("Expected error for non-existent template")
 	}
@@ -62,11 +62,11 @@ func TestRenderSingleTemplate(t *testing.T) {
 	}
 
 	// Create a temporary template with only text
-	templates["single.txt"] = parseTemplate("single.txt")
-	defer delete(templates, "single.txt")
+	templates["en/single.txt"] = parseTemplate("en/single.txt")
+	defer delete(templates, "en/single.txt")
 
 	// Test rendering with only text template
-	text, html, err := Render("single", data)
+	text, html, err := Render("", "single", data)
 	if err != nil {
 		t.Errorf("Render failed: %v", err)
 	}

@@ -17,7 +17,7 @@ func (c *Comms) SendWelcomeEmail(ctx context.Context, recipient Recipient) error
 		return fmt.Errorf("invalid recipient: %w", err)
 	}
 
-	text, html, err := Render("welcome", map[string]string{
+	text, html, err := Render(recipient.Lang(), "welcome", map[string]string{
 		"DisplayName": recipient.Name(),
 	})
 	if err != nil {

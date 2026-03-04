@@ -1,0 +1,4 @@
+Hallo, dies ist eine einfache E-Mail.
+{{ range . }}
+{{ .Name }}
+{{ end }}

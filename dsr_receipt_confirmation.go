@@ -41,7 +41,7 @@ func (c *Comms) SendDsrReceiptConfirmationEmail(ctx context.Context, r Recipient
 }
 
 func (c *Comms) newDsrReceiptConfirmationEmail(data DsrReceiptConfirmationData) (driver.Message, error) {
-	text, html, err := Render("dsr-receipt-confirmation", data)
+	text, html, err := Render(data.Recipient.Lang(), "dsr-receipt-confirmation", data)
 	if err != nil {
 		return driver.Message{}, err
 	}

@@ -38,7 +38,7 @@ func (c *Comms) SendIncidentDeadlineOverdueEmail(ctx context.Context, r Recipien
 }
 
 func (c *Comms) newIncidentDeadlineOverdueEmail(data IncidentDeadlineOverdueData) (driver.Message, error) {
-	text, html, err := Render("incident-deadline-overdue", data)
+	text, html, err := Render(data.Recipient.Lang(), "incident-deadline-overdue", data)
 	if err != nil {
 		return driver.Message{}, err
 	}
