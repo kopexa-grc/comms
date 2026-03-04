@@ -21,7 +21,7 @@ func (c *Comms) SendNewSubscriber(ctx context.Context, r Recipient, token string
 
 	data := subscriberEmailData{
 		CommonData: CommonData{
-			Subject:   "Thank you for subscribing",
+			Subject:   Subject("subscribe", r.Lang()),
 			Recipient: r,
 		},
 	}

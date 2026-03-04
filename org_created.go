@@ -29,7 +29,7 @@ func (c *Comms) SendOrgCreatedEmail(ctx context.Context, recipient Recipient, or
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: "Your organization has been created",
+		Subject: Subject("org-created", recipient.Lang()),
 		Text:    text,
 		HTML:    html,
 	}

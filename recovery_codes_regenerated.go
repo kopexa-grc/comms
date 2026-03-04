@@ -28,7 +28,7 @@ func (c *Comms) RecoveryCodesRegenerated(ctx context.Context, recipient Recipien
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: "Reset your password",
+		Subject: Subject("recovery-codes-regenerated", recipient.Lang()),
 		Text:    text,
 		HTML:    html,
 	}

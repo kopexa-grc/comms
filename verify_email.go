@@ -19,7 +19,7 @@ type verifyEmailData struct {
 func (c *Comms) SendVerifyEmail(ctx context.Context, r Recipient, url string) error {
 	data := verifyEmailData{
 		CommonData: CommonData{
-			Subject:   "Verify your email address",
+			Subject:   Subject("verify-email", r.Lang()),
 			Recipient: r,
 		},
 		DisplayName: r.Name(),

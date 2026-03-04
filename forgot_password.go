@@ -30,7 +30,7 @@ func (c *Comms) SendForgotPasswordEmail(ctx context.Context, recipient Recipient
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: "Reset your password",
+		Subject: Subject("forgot-password", recipient.Lang()),
 		Text:    text,
 		HTML:    html,
 	}

@@ -5,6 +5,7 @@ package comms
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/kopexa-grc/comms/v2/driver"
 )
@@ -25,7 +26,7 @@ type IncidentDeadlineReminderData struct {
 // SendIncidentDeadlineReminderEmail sends a reminder email for an upcoming incident reporting deadline
 func (c *Comms) SendIncidentDeadlineReminderEmail(ctx context.Context, r Recipient, data IncidentDeadlineReminderData) error {
 	data.CommonData = CommonData{
-		Subject:   "Incident reporting deadline approaching: " + data.IncidentTitle,
+		Subject:   fmt.Sprintf(Subject("incident-deadline-reminder", r.Lang()), data.IncidentTitle),
 		Recipient: r,
 	}
 

@@ -5,6 +5,7 @@ package comms
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/kopexa-grc/comms/v2/driver"
 )
@@ -28,7 +29,7 @@ type DsrReceiptConfirmationData struct {
 // acknowledging receipt of their data subject request
 func (c *Comms) SendDsrReceiptConfirmationEmail(ctx context.Context, r Recipient, data DsrReceiptConfirmationData) error {
 	data.CommonData = CommonData{
-		Subject:   "Confirmation of Your Data Subject Request - " + data.DisplayID,
+		Subject:   fmt.Sprintf(Subject("dsr-receipt-confirmation", r.Lang()), data.DisplayID),
 		Recipient: r,
 	}
 

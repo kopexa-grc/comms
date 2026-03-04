@@ -46,7 +46,7 @@ func (c *Comms) SendTransferSenderConfirmEmail(ctx context.Context, recipient Re
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: fmt.Sprintf("Confirm ownership transfer for %s", data.Organization),
+		Subject: fmt.Sprintf(Subject("org-transfer-sender-confirm", recipient.Lang()), data.Organization),
 		Text:    text,
 		HTML:    html,
 	}
@@ -78,7 +78,7 @@ func (c *Comms) SendTransferReceiverInviteEmail(ctx context.Context, recipient R
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: fmt.Sprintf("%s has invited you to become owner of %s", data.SenderName, data.Organization),
+		Subject: fmt.Sprintf(Subject("org-transfer-receiver-invite", recipient.Lang()), data.Organization),
 		Text:    text,
 		HTML:    html,
 	}

@@ -26,7 +26,7 @@ func (c *Comms) SendPasswordResetSuccessEmail(ctx context.Context, recipient Rec
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: "Your password has been successfully reset",
+		Subject: Subject("password-reset-success", recipient.Lang()),
 		Text:    text,
 		HTML:    html,
 	}

@@ -33,7 +33,7 @@ func (c *Comms) SendInviteAcceptedEmail(ctx context.Context, recipient Recipient
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: fmt.Sprintf("%s has accepted your invitation to join %s", data.InviteeName, data.Organization),
+		Subject: fmt.Sprintf(Subject("org-invite-accepted", recipient.Lang()), data.InviteeName, data.Organization),
 		Text:    text,
 		HTML:    html,
 	}

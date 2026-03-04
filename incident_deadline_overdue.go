@@ -5,6 +5,7 @@ package comms
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/kopexa-grc/comms/v2/driver"
 )
@@ -25,7 +26,7 @@ type IncidentDeadlineOverdueData struct {
 // SendIncidentDeadlineOverdueEmail sends a notification email when an incident reporting deadline has passed
 func (c *Comms) SendIncidentDeadlineOverdueEmail(ctx context.Context, r Recipient, data IncidentDeadlineOverdueData) error {
 	data.CommonData = CommonData{
-		Subject:   "URGENT: Incident reporting deadline overdue: " + data.IncidentTitle,
+		Subject:   fmt.Sprintf(Subject("incident-deadline-overdue", r.Lang()), data.IncidentTitle),
 		Recipient: r,
 	}
 

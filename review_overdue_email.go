@@ -19,7 +19,7 @@ type ReviewOverdueData struct {
 
 func (c *Comms) SendReviewOverdueEmail(ctx context.Context, r Recipient, data ReviewOverdueData) error {
 	data.CommonData = CommonData{
-		Subject:   "Review overdue notification",
+		Subject:   Subject("review-overdue", r.Lang()),
 		Recipient: r,
 	}
 

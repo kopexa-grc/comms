@@ -35,7 +35,7 @@ func (c *Comms) SendVendorAssessmentEmail(ctx context.Context, recipient Recipie
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: fmt.Sprintf("%s has requested a vendor assessment from you", data.OrganizationName),
+		Subject: fmt.Sprintf(Subject("vendor-assessment-request", recipient.Lang()), data.OrganizationName),
 		Text:    text,
 		HTML:    html,
 	}

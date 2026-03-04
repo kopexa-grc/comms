@@ -27,7 +27,7 @@ func (c *Comms) SendWelcomeEmail(ctx context.Context, recipient Recipient) error
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: "Welcome to Kopexa",
+		Subject: Subject("welcome", recipient.Lang()),
 		Text:    text,
 		HTML:    html,
 	}

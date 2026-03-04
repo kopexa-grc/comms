@@ -39,7 +39,7 @@ func (c *Comms) SendInviteEmail(ctx context.Context, recipient Recipient, data I
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: fmt.Sprintf("%s has invited you to join %s on Kopexa", data.Actor, data.Organization),
+		Subject: fmt.Sprintf(Subject("org-invite", recipient.Lang()), data.Organization),
 		Text:    text,
 		HTML:    html,
 	}

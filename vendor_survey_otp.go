@@ -33,7 +33,7 @@ func (c *Comms) SendSurveyOTP(ctx context.Context, recipientEmail, recipientName
 	message := driver.Message{
 		From:    c.config.From,
 		To:      []string{recipient.String()},
-		Subject: "Your verification code for the vendor assessment",
+		Subject: Subject("vendor-survey-otp", recipient.Lang()),
 		Text:    text,
 		HTML:    html,
 	}
