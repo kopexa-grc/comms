@@ -1,0 +1,40 @@
+Kopexa
+
+Löschung der Organisation bestätigen
+
+Hallo {{ .DisplayName }},
+
+du hast die Löschung der Organisation {{ .OrganizationName }} angefragt.
+
+WARNUNG: Diese Aktion ist unwiderruflich. Die Organisation und alle zugehörigen
+Daten, Mitglieder und Einstellungen werden dauerhaft gelöscht.
+
+Um diese Löschung zu bestätigen, klicke bitte auf den folgenden Link oder
+kopiere ihn in deinen Browser:
+
+{{ .URL }}
+
+Dieser Link läuft in {{ .ExpiresIn }} ab.
+
+Falls du diese Löschung nicht angefragt hast, kannst du diese E-Mail ignorieren.
+Die Anfrage läuft automatisch ab.
+
+--------------------------------------------------------------------------------
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Deutschland

@@ -33,6 +33,10 @@ var subjects = map[string]map[string]string{
 		"en": "%s has accepted your invitation to join %s",
 		"de": "%s hat deine Einladung zu %s angenommen",
 	},
+	"org-deletion-confirm": {
+		"en": "Confirm Organization Deletion — %s",
+		"de": "Löschung der Organisation bestätigen — %s",
+	},
 	"org-transfer-sender-confirm": {
 		"en": "Confirm ownership transfer for %s",
 		"de": "Bestätige die Übertragung von %s",
@@ -48,6 +52,10 @@ var subjects = map[string]map[string]string{
 	"recovery-codes-regenerated": {
 		"en": "Your recovery codes have been regenerated",
 		"de": "Deine Wiederherstellungscodes wurden neu generiert",
+	},
+	"space-deletion-confirm": {
+		"en": "Confirm Space Deletion — %s",
+		"de": "Löschung des Spaces bestätigen — %s",
 	},
 	"review-overdue": {
 		"en": "Review overdue notification",
