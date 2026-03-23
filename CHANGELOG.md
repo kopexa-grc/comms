@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.6.0](https://github.com/kopexa-grc/comms/compare/v2.5.0...v2.6.0) (2026-03-23)
+
+
+### Features
+
+* add organization deletion confirmation email template (EN+DE) ([662ade1](https://github.com/kopexa-grc/comms/commit/662ade1a8602f4c88f9d84533d334dc4fd043703))
+* add space deletion confirmation email template (EN+DE) ([b3793af](https://github.com/kopexa-grc/comms/commit/b3793afee948c34813d0e63cc56c272aa9a80fbd))
+
 ## [2.5.0](https://github.com/kopexa-grc/comms/compare/v2.4.4...v2.5.0) (2026-03-04)
 
 
