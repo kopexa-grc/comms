@@ -1,0 +1,41 @@
+Kopexa
+
+Löschung des Spaces bestätigen
+
+Hallo {{ .DisplayName }},
+
+du hast die Löschung des Spaces {{ .SpaceName }} in der Organisation
+{{ .OrganizationName }} angefragt.
+
+WARNUNG: Diese Aktion ist unwiderruflich. Alle Daten, Assessments, Dokumente,
+Risiken und andere Inhalte in diesem Space werden dauerhaft gelöscht.
+
+Um die Löschung zu bestätigen, klicke bitte auf den folgenden Link oder kopiere
+ihn in deinen Browser:
+
+{{ .URL }}
+
+Dieser Link ist {{ .ExpiresIn }} gültig.
+
+Falls du diese Löschung nicht angefragt hast, kannst du diese E-Mail ignorieren.
+Die Anfrage läuft automatisch ab.
+
+--------------------------------------------------------------------------------
+
+Du erhältst diese E-Mail, weil deine Organisation Kopexa nutzt oder mit unseren
+Diensten interagiert hat. Diese Nachricht kann wichtige Updates zu deinen
+Compliance-Aktivitäten, Organisationseinstellungen oder rechtlichen
+Verpflichtungen enthalten.
+
+Bei Fragen oder wenn du Unterstützung benötigst, wende dich bitte an unser
+Support-Team unter support@kopexa.com.
+
+Diese E-Mail wurde von Kopexa gesendet, einer Plattform für Compliance- und
+Organisationsmanagement.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Deutschland
