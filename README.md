@@ -98,6 +98,96 @@ templates/
 text, html, err := comms.Render("verify_email", data)
 ```
 
+### External Templates
+
+External templates allow you to render and send emails from template strings loaded at runtime (e.g., from a database). They are wrapped in a branded email shell automatically.
+
+#### Quick Start
+
+```go
+// Define template (typically loaded from database)
+tmpl := comms.ExternalTemplate{
+    SubjectTemplate: "Welcome to {{.OrgName}}",
+    BodyTemplate:    "<h1>Hello {{.Name}}</h1><p>Welcome aboard!</p>",
+    TextTemplate:    "Hello {{.Name}}, welcome aboard!",
+}
+
+// Optional: customize branding (nil = Kopexa defaults)
+branding := &comms.Branding{
+    BrandName:    "Acme Corp",
+    LogoURL:      "https://acme.com/logo.png",
+    PrimaryColor: "#ff6600",
+    ButtonColor:  "#cc0000",
+    SupportEmail: "help@acme.com",
+}
+
+// Render only (for previews)
+rendered, err := comms.RenderTemplate(tmpl, branding, map[string]any{
+    "Name":    "Max",
+    "OrgName": "Acme Corp",
+})
+
+// Or render + send in one call
+err = c.SendFromTemplate(ctx, recipient, tmpl, branding, data)
+```
+
+#### Template Syntax
+
+Templates use Go's [template syntax](https://pkg.go.dev/text/template) with [Sprig v3](https://masterminds.github.io/sprig/) functions available.
+
+**Body templates** (`BodyTemplate`) are rendered with `html/template` for XSS protection. **Subject** and **Text** templates use `text/template` (no HTML escaping).
+
+#### Using Branding in Templates
+
+Branding values are available in all templates via the `.Branding` key:
+
+```html
+<a href="{{.URL}}" style="background-color: {{.Branding.ButtonColor}}; color: {{.Branding.ButtonTextColor}}; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+    Click here
+</a>
+```
+
+#### Template Defaults
+
+Templates support a `Defaults` map for base-layer variables. Call-site data takes precedence:
+
+```go
+tmpl := comms.ExternalTemplate{
+    BodyTemplate: "<p>Visit {{.AppURL}}</p>",
+    Defaults:     map[string]any{"AppURL": "https://app.example.com"},
+}
+
+// Call-site data overrides defaults
+data := map[string]any{"AppURL": "https://custom.example.com"}
+```
+
+#### Branding Defaults
+
+| Field | Default |
+|-------|---------|
+| BrandName | Kopexa |
+| PrimaryColor | #2563eb |
+| BackgroundColor | #f1f5f9 |
+| TextColor | #0f172a |
+| ButtonColor | #2563eb |
+| ButtonTextColor | #ffffff |
+| LinkColor | #2563eb |
+| FontFamily | Helvetica, Arial, sans-serif |
+| CompanyName | Kopexa GmbH |
+| SupportEmail | support@kopexa.com |
+
+#### Two-Phase API
+
+For advanced use cases (previews, caching, bulk sends), use the two-phase API:
+
+```go
+// Phase 1: Render (pure, no driver needed)
+rendered, err := comms.RenderTemplate(tmpl, branding, data)
+
+// Phase 2: Send (uses configured driver)
+err = c.SendRendered(ctx, recipient, rendered)
+```
+
 ## Configuration
 
 ### Options
