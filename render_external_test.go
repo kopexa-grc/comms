@@ -181,7 +181,7 @@ func TestRenderTemplate(t *testing.T) {
 		require.Contains(t, rendered.HTML, "Hello Max")
 	})
 
-	t.Run("body only - no text", func(t *testing.T) {
+	t.Run("body only - text auto-generated from HTML", func(t *testing.T) {
 		tmpl := ExternalTemplate{
 			SubjectTemplate: "Test",
 			BodyTemplate:    "<p>Body only</p>",
@@ -190,7 +190,7 @@ func TestRenderTemplate(t *testing.T) {
 		rendered, err := RenderTemplate(tmpl, nil, nil)
 		require.NoError(t, err)
 		require.Contains(t, rendered.HTML, "Body only")
-		require.Empty(t, rendered.Text)
+		require.Equal(t, "Body only", rendered.Text)
 	})
 
 	t.Run("text only - no body", func(t *testing.T) {
@@ -243,6 +243,93 @@ func TestRenderTemplate(t *testing.T) {
 		_, err := RenderTemplate(tmpl, nil, nil)
 		require.Error(t, err)
 		require.ErrorIs(t, err, ErrTemplateContentRequired)
+	})
+}
+
+func TestHTMLToText(t *testing.T) {
+	t.Run("strips simple tags", func(t *testing.T) {
+		result := htmlToText("<p>Hello World</p>")
+		require.Equal(t, "Hello World", result)
+	})
+
+	t.Run("converts br to newline", func(t *testing.T) {
+		result := htmlToText("Line 1<br>Line 2<br/>Line 3<br />Line 4")
+		require.Contains(t, result, "Line 1\nLine 2\nLine 3\nLine 4")
+	})
+
+	t.Run("converts block elements to newlines", func(t *testing.T) {
+		result := htmlToText("<h1>Title</h1><p>Paragraph 1</p><p>Paragraph 2</p>")
+		require.Contains(t, result, "Title")
+		require.Contains(t, result, "Paragraph 1")
+		require.Contains(t, result, "Paragraph 2")
+	})
+
+	t.Run("decodes HTML entities", func(t *testing.T) {
+		result := htmlToText("<p>Tom &amp; Jerry &lt;3</p>")
+		require.Contains(t, result, "Tom & Jerry <3")
+	})
+
+	t.Run("collapses whitespace", func(t *testing.T) {
+		result := htmlToText("<p>  Hello   World  </p>")
+		require.Equal(t, "Hello World", result)
+	})
+
+	t.Run("empty string returns empty", func(t *testing.T) {
+		result := htmlToText("")
+		require.Empty(t, result)
+	})
+
+	t.Run("handles nested tags", func(t *testing.T) {
+		result := htmlToText("<p>Hello <strong>bold</strong> and <em>italic</em></p>")
+		require.Contains(t, result, "Hello bold and italic")
+	})
+
+	t.Run("handles links by extracting text", func(t *testing.T) {
+		result := htmlToText(`<a href="https://example.com">Click here</a>`)
+		require.Contains(t, result, "Click here")
+	})
+}
+
+func TestRenderTemplate_TextFallback(t *testing.T) {
+	t.Run("generates text from body when no TextTemplate", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			SubjectTemplate: "Test",
+			BodyTemplate:    "<h1>Hello {{.Name}}</h1><p>Welcome aboard!</p>",
+		}
+		data := map[string]any{"Name": "Max"}
+
+		rendered, err := RenderTemplate(tmpl, nil, data)
+		require.NoError(t, err)
+		require.NotEmpty(t, rendered.Text)
+		require.Contains(t, rendered.Text, "Hello Max")
+		require.Contains(t, rendered.Text, "Welcome aboard!")
+		// Should not contain HTML tags
+		require.NotContains(t, rendered.Text, "<h1>")
+		require.NotContains(t, rendered.Text, "<p>")
+	})
+
+	t.Run("explicit TextTemplate takes precedence over fallback", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			SubjectTemplate: "Test",
+			BodyTemplate:    "<h1>Hello {{.Name}}</h1>",
+			TextTemplate:    "Custom text: {{.Name}}",
+		}
+		data := map[string]any{"Name": "Max"}
+
+		rendered, err := RenderTemplate(tmpl, nil, data)
+		require.NoError(t, err)
+		require.Equal(t, "Custom text: Max", rendered.Text)
+	})
+
+	t.Run("text-only template does not trigger fallback", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			TextTemplate: "Text only",
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, nil)
+		require.NoError(t, err)
+		require.Empty(t, rendered.HTML)
+		require.Equal(t, "Text only", rendered.Text)
 	})
 }
 

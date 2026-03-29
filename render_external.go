@@ -6,11 +6,51 @@ package comms
 import (
 	"bytes"
 	"fmt"
+	"html"
 	htmltemplate "html/template"
+	"regexp"
+	"strings"
 	texttemplate "text/template"
 
 	"github.com/Masterminds/sprig/v3"
 )
+
+var (
+	reBlockClose = regexp.MustCompile(`</(?:p|div|h[1-6]|tr|li|blockquote)>`)
+	reBr         = regexp.MustCompile(`<br\s*/?>`)
+	reTag        = regexp.MustCompile(`<[^>]*>`)
+	reSpaces     = regexp.MustCompile(`[^\S\n]+`)
+	reBlankLines = regexp.MustCompile(`\n{3,}`)
+)
+
+// htmlToText converts an HTML string to plain text by stripping tags,
+// converting block-level elements to newlines, and decoding HTML entities.
+// Used as a fallback when no TextTemplate is provided.
+func htmlToText(s string) string {
+	if s == "" {
+		return ""
+	}
+
+	// Convert <br> variants to newlines
+	s = reBr.ReplaceAllString(s, "\n")
+
+	// Convert closing block elements to newlines
+	s = reBlockClose.ReplaceAllString(s, "\n")
+
+	// Strip all remaining HTML tags
+	s = reTag.ReplaceAllString(s, "")
+
+	// Decode HTML entities
+	s = html.UnescapeString(s)
+
+	// Collapse horizontal whitespace (but preserve newlines)
+	s = reSpaces.ReplaceAllString(s, " ")
+
+	// Collapse 3+ newlines to 2
+	s = reBlankLines.ReplaceAllString(s, "\n\n")
+
+	return strings.TrimSpace(s)
+}
 
 // mergeData merges template defaults with call-site data.
 // Call-site data takes precedence over defaults.
@@ -88,7 +128,7 @@ type shellData struct {
 //  3. Resolve branding (fill zero values with Kopexa defaults)
 //  4. Render SubjectTemplate and PreheaderTemplate with text/template
 //  5. Render BodyTemplate with html/template (XSS protection)
-//  6. Render TextTemplate with text/template
+//  6. Render TextTemplate with text/template (or auto-generate from body HTML)
 //  7. Wrap rendered body in the branded email shell
 //
 // If branding is nil, Kopexa defaults are used.
@@ -129,8 +169,17 @@ func RenderTemplate(tmpl ExternalTemplate, branding *Branding, data map[string]a
 	// Render body (html/template for XSS protection)
 	bodyHTML, bodyErr := renderHTMLTmpl(tmpl.BodyTemplate, merged)
 
-	// Render plain text (text/template)
-	textContent, textErr := renderTextTmpl(tmpl.TextTemplate, merged)
+	// Render plain text (text/template) or fall back to HTML-to-text conversion
+	var textContent string
+
+	var textErr error
+
+	if tmpl.TextTemplate != "" {
+		textContent, textErr = renderTextTmpl(tmpl.TextTemplate, merged)
+	} else if bodyErr == nil && bodyHTML != "" {
+		// Auto-generate plain text from rendered body HTML
+		textContent = htmlToText(bodyHTML)
+	}
 
 	// Both failed → error
 	if bodyErr != nil && textErr != nil {
