@@ -63,3 +63,59 @@ func TestMergeData(t *testing.T) {
 		require.Equal(t, branding, result["Branding"])
 	})
 }
+
+func TestRenderTextTemplate(t *testing.T) {
+	t.Run("simple variable substitution", func(t *testing.T) {
+		result, err := renderTextTmpl("Hello {{.Name}}", map[string]any{"Name": "Max"})
+		require.NoError(t, err)
+		require.Equal(t, "Hello Max", result)
+	})
+
+	t.Run("sprig function", func(t *testing.T) {
+		result, err := renderTextTmpl("{{.Name | upper}}", map[string]any{"Name": "max"})
+		require.NoError(t, err)
+		require.Equal(t, "MAX", result)
+	})
+
+	t.Run("empty template returns empty string", func(t *testing.T) {
+		result, err := renderTextTmpl("", map[string]any{"Name": "Max"})
+		require.NoError(t, err)
+		require.Empty(t, result)
+	})
+
+	t.Run("invalid syntax returns error", func(t *testing.T) {
+		_, err := renderTextTmpl("{{.Name", map[string]any{"Name": "Max"})
+		require.Error(t, err)
+	})
+
+	t.Run("missing variable returns error", func(t *testing.T) {
+		_, err := renderTextTmpl("{{.Missing}}", map[string]any{})
+		require.Error(t, err)
+	})
+}
+
+func TestRenderHTMLTmpl(t *testing.T) {
+	t.Run("html escapes by default", func(t *testing.T) {
+		result, err := renderHTMLTmpl("Hello {{.Name}}", map[string]any{"Name": "<script>alert('xss')</script>"})
+		require.NoError(t, err)
+		require.NotContains(t, result, "<script>")
+		require.Contains(t, result, "&lt;script&gt;")
+	})
+
+	t.Run("sprig function", func(t *testing.T) {
+		result, err := renderHTMLTmpl("{{.Name | upper}}", map[string]any{"Name": "max"})
+		require.NoError(t, err)
+		require.Equal(t, "MAX", result)
+	})
+
+	t.Run("empty template returns empty string", func(t *testing.T) {
+		result, err := renderHTMLTmpl("", map[string]any{"Name": "Max"})
+		require.NoError(t, err)
+		require.Empty(t, result)
+	})
+
+	t.Run("invalid syntax returns error", func(t *testing.T) {
+		_, err := renderHTMLTmpl("{{.Name", map[string]any{"Name": "Max"})
+		require.Error(t, err)
+	})
+}
