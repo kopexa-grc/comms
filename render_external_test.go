@@ -120,6 +120,132 @@ func TestRenderHTMLTmpl(t *testing.T) {
 	})
 }
 
+func TestRenderTemplate(t *testing.T) {
+	t.Run("full pipeline with body and text", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			SubjectTemplate:   "Welcome to {{.OrgName}}",
+			PreheaderTemplate: "You have been invited to {{.OrgName}}",
+			BodyTemplate:      `<h1>Hello {{.Name}}</h1><p>Welcome to {{.OrgName}}!</p>`,
+			TextTemplate:      "Hello {{.Name}}, welcome to {{.OrgName}}!",
+		}
+		data := map[string]any{
+			"Name":    "Max",
+			"OrgName": "Acme Corp",
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, data)
+		require.NoError(t, err)
+		require.Equal(t, "Welcome to Acme Corp", rendered.Subject)
+		require.Contains(t, rendered.HTML, "Hello Max")
+		require.Contains(t, rendered.HTML, "Welcome to Acme Corp!")
+		require.Contains(t, rendered.HTML, "<!DOCTYPE html")
+		require.Contains(t, rendered.HTML, DefaultBrandName)
+		require.Contains(t, rendered.Text, "Hello Max, welcome to Acme Corp!")
+	})
+
+	t.Run("branding accessible in body template", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			BodyTemplate: `<a style="background-color: {{.Branding.ButtonColor}}; color: {{.Branding.ButtonTextColor}};">Click</a>`,
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, nil)
+		require.NoError(t, err)
+		require.Contains(t, rendered.HTML, DefaultButtonColor)
+		require.Contains(t, rendered.HTML, DefaultButtonTextColor)
+	})
+
+	t.Run("custom branding", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			BodyTemplate: `<p>Hello</p>`,
+		}
+		branding := &Branding{
+			BrandName:    "Acme",
+			PrimaryColor: "#ff0000",
+		}
+
+		rendered, err := RenderTemplate(tmpl, branding, nil)
+		require.NoError(t, err)
+		require.Contains(t, rendered.HTML, "Acme")
+		require.Contains(t, rendered.HTML, "#ff0000")
+	})
+
+	t.Run("defaults merged with data", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			BodyTemplate: `<p>{{.Greeting}} {{.Name}}</p>`,
+			Defaults:     map[string]any{"Greeting": "Hello"},
+		}
+		data := map[string]any{"Name": "Max"}
+
+		rendered, err := RenderTemplate(tmpl, nil, data)
+		require.NoError(t, err)
+		require.Contains(t, rendered.HTML, "Hello Max")
+	})
+
+	t.Run("body only - no text", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			SubjectTemplate: "Test",
+			BodyTemplate:    "<p>Body only</p>",
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, nil)
+		require.NoError(t, err)
+		require.Contains(t, rendered.HTML, "Body only")
+		require.Empty(t, rendered.Text)
+	})
+
+	t.Run("text only - no body", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			SubjectTemplate: "Test",
+			TextTemplate:    "Text only",
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, nil)
+		require.NoError(t, err)
+		require.Empty(t, rendered.HTML)
+		require.Equal(t, "Text only", rendered.Text)
+	})
+
+	t.Run("empty subject returns empty string", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			BodyTemplate: "<p>Content</p>",
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, nil)
+		require.NoError(t, err)
+		require.Empty(t, rendered.Subject)
+	})
+
+	t.Run("invalid body template returns error when text also fails", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			BodyTemplate: "{{.Missing}",
+			TextTemplate: "{{.Missing}",
+		}
+
+		_, err := RenderTemplate(tmpl, nil, nil)
+		require.Error(t, err)
+	})
+
+	t.Run("invalid body but valid text succeeds", func(t *testing.T) {
+		tmpl := ExternalTemplate{
+			BodyTemplate: "{{.Missing}",
+			TextTemplate: "Fallback text",
+		}
+
+		rendered, err := RenderTemplate(tmpl, nil, nil)
+		require.NoError(t, err)
+		require.Empty(t, rendered.HTML)
+		require.Equal(t, "Fallback text", rendered.Text)
+	})
+
+	t.Run("validation error for empty templates", func(t *testing.T) {
+		tmpl := ExternalTemplate{}
+
+		_, err := RenderTemplate(tmpl, nil, nil)
+		require.Error(t, err)
+		require.ErrorIs(t, err, ErrTemplateContentRequired)
+	})
+}
+
 func TestRenderShell(t *testing.T) {
 	branding := resolveBranding(nil)
 
