@@ -69,6 +69,7 @@ func TestRenderLanguages(t *testing.T) {
 		if !strings.Contains(text, "Hello Max!") {
 			t.Errorf("Expected English text to contain 'Hello Max!', got: %s", text)
 		}
+
 		if !strings.Contains(html, "<h1>Hello Max!</h1>") {
 			t.Errorf("Expected English HTML to contain '<h1>Hello Max!</h1>', got: %s", html)
 		}
@@ -83,6 +84,7 @@ func TestRenderLanguages(t *testing.T) {
 		if !strings.Contains(text, "Hallo Max!") {
 			t.Errorf("Expected German text to contain 'Hallo Max!', got: %s", text)
 		}
+
 		if !strings.Contains(html, "<h1>Hallo Max!</h1>") {
 			t.Errorf("Expected German HTML to contain '<h1>Hallo Max!</h1>', got: %s", html)
 		}
@@ -98,6 +100,7 @@ func TestRenderLanguages(t *testing.T) {
 		if !strings.Contains(text, "Hello Max!") {
 			t.Errorf("Expected fallback to English text 'Hello Max!', got: %s", text)
 		}
+
 		if !strings.Contains(html, "<h1>Hello Max!</h1>") {
 			t.Errorf("Expected fallback to English HTML '<h1>Hello Max!</h1>', got: %s", html)
 		}
