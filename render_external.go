@@ -72,3 +72,32 @@ func renderHTMLTmpl(tmplStr string, data any) (string, error) {
 
 	return buf.String(), nil
 }
+
+// shellData holds the data passed to the email shell template.
+type shellData struct {
+	Body      htmltemplate.HTML
+	Preheader string
+	Branding  Branding
+}
+
+// renderShell wraps rendered body HTML in the branded email shell.
+// The body parameter is treated as pre-rendered trusted HTML.
+func renderShell(body, preheader string, branding Branding) (string, error) {
+	t, err := htmltemplate.New("shell").Parse(emailShellTemplate)
+	if err != nil {
+		return "", fmt.Errorf("failed to parse shell template: %w", err)
+	}
+
+	data := shellData{
+		Body:      htmltemplate.HTML(body), // #nosec G203 — body is pre-rendered by renderHTMLTmpl
+		Preheader: preheader,
+		Branding:  branding,
+	}
+
+	var buf bytes.Buffer
+	if err := t.Execute(&buf, data); err != nil {
+		return "", fmt.Errorf("failed to execute shell template: %w", err)
+	}
+
+	return buf.String(), nil
+}
