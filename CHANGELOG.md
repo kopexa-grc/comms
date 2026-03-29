@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.7.0](https://github.com/kopexa-grc/comms/compare/v2.6.0...v2.7.0) (2026-03-29)
+
+
+### Features
+
+* add external template rendering with configurable branding ([#18](https://github.com/kopexa-grc/comms/issues/18)) ([17714e4](https://github.com/kopexa-grc/comms/commit/17714e4381147669eec984345d2878c836f7527b))
+
 ## [2.6.0](https://github.com/kopexa-grc/comms/compare/v2.5.0...v2.6.0) (2026-03-23)
 
 
