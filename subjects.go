@@ -65,6 +65,10 @@ var subjects = map[string]map[string]string{
 		"en": "Review required notification",
 		"de": "Überprüfung erforderlich",
 	},
+	"summary": {
+		"en": "Your daily summary",
+		"de": "Deine tägliche Zusammenfassung",
+	},
 	"subscribe": {
 		"en": "Thank you for subscribing",
 		"de": "Danke für deine Anmeldung",

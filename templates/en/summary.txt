@@ -1,0 +1,32 @@
+Kopexa
+
+Your daily summary
+
+You have {{ .TotalCount }} items that require your attention.
+
+{{ range .Sections }}
+{{ .Label }}
+{{ range .Spaces }}
+  {{ .SpaceName }}
+{{ range .EntityGroups }}    {{ .Label }} ({{ len .Items }})
+{{ range .Items }}    {{ .EntityName }}
+    {{ .EntityURL }}
+{{ end }}{{ end }}{{ end }}{{ end }}
+
+You are receiving this email because your organization is using Kopexa or has
+interacted with our services. This message may contain important updates
+regarding your compliance activities, organization settings, or legal
+obligations.
+
+If you have any questions or need assistance, please contact our support team at
+support@kopexa.com.
+
+This email was sent by Kopexa, a platform for managing compliance and
+organization settings.
+
+--------------------------------------------------------------------------------
+
+Kopexa GmbH
+Schauenburgerstraße 116
+24118 Kiel
+Germany
