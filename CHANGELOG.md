@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.0](https://github.com/kopexa-grc/comms/compare/v2.7.0...v2.8.0) (2026-04-11)
+
+
+### Features
+
+* add daily summary email template ([d3ac85a](https://github.com/kopexa-grc/comms/commit/d3ac85ac7ccc32391d2c89b202293ac1179b669f))
+
 ## [2.7.0](https://github.com/kopexa-grc/comms/compare/v2.6.0...v2.7.0) (2026-03-29)
 
 
