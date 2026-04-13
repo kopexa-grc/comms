@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.9.0](https://github.com/kopexa-grc/comms/compare/v2.8.0...v2.9.0) (2026-04-13)
+
+
+### Features
+
+* remove summary and review email templates ([e8c82de](https://github.com/kopexa-grc/comms/commit/e8c82de2b69f045ab8b0e094a4cddb0adc53715c))
+
 ## [2.8.0](https://github.com/kopexa-grc/comms/compare/v2.7.0...v2.8.0) (2026-04-11)
 
 
