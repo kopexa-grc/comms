@@ -24,6 +24,10 @@
 - Admin UI for connector setup, mapping config, sync history — Plan 1.2
 - Populating `sync_state` / `last_synced_at` / `sync_error` — Plan 1.2 (fields exist from this plan but stay at default values)
 
+**Workflow conventions for this plan:**
+- **Migrations**: Do NOT generate database migrations during the plan. The dev `kopexa serve` auto-migrate picks up schema changes on boot. ONE consolidated migration is generated at the very end of the branch, exclusively via `./kopexa-gen migrate`.
+- **Generated-code tests**: Do NOT write Go tests that just verify ent / gqlgen-generated behavior (defaults, edge resolution, where-input filtering). Manual e2e in Task 17 covers the integration surface; hooks and custom logic get their own unit tests when they are introduced.
+
 ---
 
 ## File Structure
@@ -39,16 +43,16 @@
 | `internal/store/schema/people.go` | Modify | Add 8 new fields + unique edge to `Vendor` |
 | `internal/store/schema/vendor.go` | Modify | Add inverse pagination edge to `People` (for vendor → people listing later) |
 | `internal/store/ent/**` | Regenerate | `task gen:ent` |
-| `db/migrations/**` | Create | Atlas migration via `./kopexa-gen migrate --name add_people_worker_type` |
+| `db/migrations/**` | **Create at end only** | One consolidated migration via `./kopexa-gen migrate` as the final task. Skipped for every intermediate task. |
 | `internal/channels/graphapi/**` | Regenerate | `task gen:gql` |
-| `internal/channels/graphapi/people_test.go` | Create or extend | Integration tests for create employee + create contractor |
 | `src/modules/people/validation/index.ts` | Modify | Add `workerType`, `vendorId`, `contractEndDate` to zod schema |
 | `src/modules/people/components/create-form/people-create-form.tsx` | Modify | Add `WorkerTypeField` + conditional vendor picker + conditional `contractEndDate` |
 | `src/modules/people/components/edit-form/people-edit-form.tsx` | Modify | Same fields, editable |
 | `src/modules/people/components/form/worker-type-field.tsx` | Create | Reusable `<WorkerTypeField />` (Select with enum values + i18n labels) |
 | `src/modules/people/components/table/table-config.tsx` | Modify | Add `workerType` column with badge rendering |
-| `src/modules/people/components/table/people-table-toolbar.tsx` | Modify | Add `workerType` filter dropdown |
-| `messages/en/people.json` | Modify | i18n keys for worker types + new form labels |
+| `src/modules/people/hooks/use-people-filter-where.ts` | Create | nuqs-backed filter state + `convertFiltersToWhere` mapping for People (mirrors `use-vendor-filter-where.ts`) |
+| `src/modules/people/components/table/people-table-toolbar.tsx` | Rewrite | Replace bare `SearchInput` with `SearchFilterBar` (from `@kopexa/sight`), pulling state from `use-people-filter-where` |
+| `messages/en/people.json` | Modify | i18n keys for worker types + new form labels + filter labels |
 | `messages/de/people.json` | Modify | Same, German (du-form) |
 
 ---
@@ -605,64 +609,11 @@ git commit -m "feat(people): add worker_type, source, vendor link and sync field
 
 ---
 
-## Task 5: Create the database migration
+## Task 5: ~~Create the database migration~~ — DEFERRED TO END OF PLAN
 
-**Files:**
-- Create: `db/migrations/**` (Atlas-generated)
-- Create: `db/migrations-goose-postgres/**` (generator-created)
+**Status:** Skipped at this position. Migrations are NOT generated per task during the plan; the dev server's auto-migrate picks up schema changes on `kopexa serve` boot. ONE consolidated migration is generated in the very last task of the branch via `./kopexa-gen migrate`, never via any other tool.
 
-- [ ] **Step 1: Generate the migration**
-
-Run:
-
-```bash
-./kopexa-gen migrate --name add_people_worker_type
-```
-
-Expected: new files appear in `db/migrations/` and `db/migrations-goose-postgres/`.
-
-- [ ] **Step 2: Inspect the generated SQL**
-
-Open the newly created files in `db/migrations/`. Verify that the migration:
-- Adds `worker_type` column with default `'EMPLOYEE'`
-- Adds `source` column with default `'MANUAL'`
-- Adds `external_id`, `vendor_id`, `contract_end_date`, `last_synced_at`, `sync_error` columns as nullable
-- Adds `sync_state` column with default `'NOT_SYNCED'`
-- Adds a new unique index on `(space_id, source, external_id) WHERE external_id IS NOT NULL AND deleted_at IS NULL`
-- Adds a foreign key from `people.vendor_id → vendors.id` (or whatever the vendor table is called; check the existing migration structure)
-
-If something looks wrong, fix the schema and regenerate (`task gen:ent` then `./kopexa-gen migrate --name add_people_worker_type` again — delete the old migration file first).
-
-- [ ] **Step 3: Apply the migration locally**
-
-```bash
-docker-compose up -d db
-./kopexa serve &
-# Server should auto-run pending migrations on boot. Watch logs for
-# "migrated to version ..." from the atlas runner.
-# Stop the server once confirmed.
-```
-
-Alternatively if there is a direct migrate command in the `Taskfile`:
-
-```bash
-task db:migrate
-```
-
-- [ ] **Step 4: Verify the columns exist**
-
-```bash
-docker-compose exec db psql -U kopexa -d kopexa -c "\\d people" | grep -E "worker_type|source|vendor_id|contract_end_date|sync_state"
-```
-
-Expected: all five columns listed.
-
-- [ ] **Step 5: Commit the migration**
-
-```bash
-git add db/migrations/ db/migrations-goose-postgres/
-git commit -m "chore(db): migrate people to support worker_type and vendor link"
-```
+If you are an implementer and you find yourself about to run `./kopexa-gen migrate` here, **stop and skip this task**. Move on to Task 6.
 
 ---
 
@@ -706,185 +657,11 @@ git commit -m "chore(gqlgen): regenerate people types for new fields"
 
 ---
 
-## Task 7: Backend integration test — create employee (default)
+## Tasks 7-9: ~~Backend integration tests for People schema~~ — SKIPPED
 
-**Why:** Prove that creating a `People` row without specifying `worker_type` still works and defaults to `EMPLOYEE`.
+**Status:** Skipped. These tests would only verify ent/gqlgen-generated behavior (default values, FK edge resolution, where-input filtering) — nothing the team wrote and nothing that would break on its own. Generated-code coverage is the wrong place to spend test time. The end-of-plan manual e2e check (Task 17) is the canonical verification of the integration surface; hooks and custom logic get unit tests when they are introduced (none in this plan).
 
-**Files:**
-- Modify: `internal/channels/graphapi/people_test.go` (add new test; create file if it does not exist yet)
-
-- [ ] **Step 1: Find existing people test patterns**
-
-```bash
-grep -rln "CreatePeople" internal/channels/graphapi/*_test.go internal/store/ent/people_test.go 2>/dev/null
-```
-
-If `internal/channels/graphapi/people_test.go` exists, extend it. Otherwise find any `_test.go` in that package that sets up the test client and model the test after it (e.g. `business_unit_test.go`).
-
-- [ ] **Step 2: Write the failing test**
-
-Add to `internal/channels/graphapi/people_test.go` (create the file if needed, using the same `package graphapi_test` header and test-setup helpers as the neighboring `*_test.go` files in that directory):
-
-```go
-func TestCreatePeople_DefaultsToEmployee(t *testing.T) {
-	ctx, cli := setupTestClient(t) // use whatever helper the neighboring tests use
-
-	space := newTestSpace(t, ctx, cli)
-
-	got, err := cli.People.Create().
-		SetFirstName("Ada").
-		SetLastName("Lovelace").
-		SetEmail("ada@example.com").
-		SetSpaceID(space.ID).
-		Save(ctx)
-	require.NoError(t, err)
-
-	assert.Equal(t, enums.WorkerTypeEmployee, got.WorkerType)
-	assert.Equal(t, enums.PeopleSourceManual, got.Source)
-	assert.Equal(t, enums.SyncStateNotSynced, got.SyncState)
-	assert.Empty(t, got.ExternalID)
-	assert.Empty(t, got.VendorID)
-}
-```
-
-*(The `setupTestClient` / `newTestSpace` names are placeholders — use whatever helpers the neighboring tests use. If you're unsure, run `grep -l "setupTestClient\|NewTestClient\|TestSpace" internal/channels/graphapi/*_test.go` to find the pattern.)*
-
-- [ ] **Step 3: Run the test to verify it fails**
-
-```bash
-go test ./internal/channels/graphapi/ -run TestCreatePeople_DefaultsToEmployee -v
-```
-
-Expected: compile passes (the fields exist from Task 6), test passes — because the defaults in the schema produce exactly these values. *If it fails*, verify Task 4's defaults were correctly set.
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add internal/channels/graphapi/people_test.go
-git commit -m "test(people): verify employee defaults on creation"
-```
-
----
-
-## Task 8: Backend integration test — create contractor with vendor + contract end date
-
-**Why:** Prove that the external-workforce path works end-to-end: vendor FK resolves, contract_end_date stores, sync defaults stay correct.
-
-**Files:**
-- Modify: `internal/channels/graphapi/people_test.go`
-
-- [ ] **Step 1: Write the failing test**
-
-Add to `people_test.go`:
-
-```go
-func TestCreatePeople_Contractor_WithVendorAndContractEnd(t *testing.T) {
-	ctx, cli := setupTestClient(t)
-
-	space := newTestSpace(t, ctx, cli)
-
-	vendor, err := cli.Vendor.Create().
-		SetName("Acme Consulting GmbH").
-		SetSpaceID(space.ID).
-		Save(ctx)
-	require.NoError(t, err)
-
-	endDate := time.Now().AddDate(0, 6, 0)
-
-	got, err := cli.People.Create().
-		SetFirstName("Grace").
-		SetLastName("Hopper").
-		SetEmail("grace@acme-consulting.example").
-		SetSpaceID(space.ID).
-		SetWorkerType(enums.WorkerTypeContractor).
-		SetVendorID(vendor.ID).
-		SetContractEndDate(endDate).
-		Save(ctx)
-	require.NoError(t, err)
-
-	assert.Equal(t, enums.WorkerTypeContractor, got.WorkerType)
-	assert.Equal(t, vendor.ID, got.VendorID)
-	assert.WithinDuration(t, endDate, got.ContractEndDate, time.Second)
-
-	// The edge resolves back to the vendor.
-	linkedVendor, err := got.QueryVendor().Only(ctx)
-	require.NoError(t, err)
-	assert.Equal(t, vendor.ID, linkedVendor.ID)
-}
-```
-
-- [ ] **Step 2: Run the test to verify it passes**
-
-```bash
-go test ./internal/channels/graphapi/ -run TestCreatePeople_Contractor -v
-```
-
-Expected: PASS.
-
-*If the test fails at `.QueryVendor()` with "undefined field", Task 4 Step 3 missed the edge. Fix it, re-run gen:ent, retry.*
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add internal/channels/graphapi/people_test.go
-git commit -m "test(people): verify contractor creation with vendor link"
-```
-
----
-
-## Task 9: Backend integration test — filter roster by worker_type
-
-**Why:** The admin UI relies on `PeopleWhereInput.workerType` filtering working through the generated GraphQL `where` clause. Prove it.
-
-**Files:**
-- Modify: `internal/channels/graphapi/people_test.go`
-
-- [ ] **Step 1: Write the failing test**
-
-Add to `people_test.go`:
-
-```go
-func TestPeople_FilterByWorkerType(t *testing.T) {
-	ctx, cli := setupTestClient(t)
-	space := newTestSpace(t, ctx, cli)
-
-	_, err := cli.People.Create().SetFirstName("Emp").SetLastName("A").SetSpaceID(space.ID).Save(ctx)
-	require.NoError(t, err)
-	_, err = cli.People.Create().SetFirstName("Con").SetLastName("B").SetSpaceID(space.ID).
-		SetWorkerType(enums.WorkerTypeContractor).Save(ctx)
-	require.NoError(t, err)
-	_, err = cli.People.Create().SetFirstName("Free").SetLastName("C").SetSpaceID(space.ID).
-		SetWorkerType(enums.WorkerTypeFreelancer).Save(ctx)
-	require.NoError(t, err)
-
-	externals, err := cli.People.Query().
-		Where(people.WorkerTypeIn(enums.WorkerTypeContractor, enums.WorkerTypeFreelancer)).
-		All(ctx)
-	require.NoError(t, err)
-	assert.Len(t, externals, 2)
-
-	employees, err := cli.People.Query().
-		Where(people.WorkerTypeEQ(enums.WorkerTypeEmployee)).
-		All(ctx)
-	require.NoError(t, err)
-	assert.Len(t, employees, 1)
-}
-```
-
-- [ ] **Step 2: Run**
-
-```bash
-go test ./internal/channels/graphapi/ -run TestPeople_FilterByWorkerType -v
-```
-
-Expected: PASS.
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add internal/channels/graphapi/people_test.go
-git commit -m "test(people): verify worker_type filtering on list query"
-```
+If you are an implementer reading this, **skip Tasks 7-9 entirely** and proceed to Task 10.
 
 ---
 
@@ -1274,15 +1051,23 @@ git commit -m "feat(people): support worker_type + vendor in edit form"
 
 ---
 
-## Task 16: Add `workerType` column + filter to the roster
+## Task 16: Migrate People roster to `SearchFilterBar` + `workerType` column
+
+**Goal:** Replace the bare `SearchInput` in `people-table-toolbar.tsx` with the new `SearchFilterBar` pattern from `@kopexa/sight` (the same component that vendors and issues already use). At the same time, introduce the worker-type column and worker-type filter.
+
+**Why the migration:** The People roster is currently the odd one out — vendors and issues both have a unified, URL-state-backed filter+search bar via `SearchFilterBar`. We want all roster surfaces to look and feel the same, and we want filter state to be shareable via URL.
+
+**Reference implementation:** `src/modules/vendor/vendor-list/components/vendor-table-toolbar.tsx` and its sibling hook `src/modules/vendor/vendor-list/hooks/use-vendor-filter-where.ts`. Read both files first to understand the pattern — they are the canonical example.
 
 **Files:**
-- Modify: `src/modules/people/components/table/table-config.tsx`
-- Modify: `src/modules/people/components/table/people-table-toolbar.tsx`
+- Modify: `src/modules/people/components/table/table-config.tsx` — add the `workerType` column with badge rendering
+- Create: `src/modules/people/hooks/use-people-filter-where.ts` — nuqs-backed filter state + `convertFiltersToWhere` mapping for People
+- Rewrite: `src/modules/people/components/table/people-table-toolbar.tsx` — replace bare `SearchInput` with `SearchFilterBar`
+- Modify: wherever the People list page consumes the toolbar — wire it to read `whereCondition` from the new hook (search the people page tree for where `PeopleTableToolbar` is rendered and where the people list query gets its `where` input)
 
-- [ ] **Step 1: Add the column**
+### Step 1: Add the `workerType` column to `table-config.tsx`
 
-Open `table-config.tsx`. Find where existing columns like `employmentStatus` or `jobTitle` are declared. Add a new column after `employmentStatus`:
+- [ ] Open `src/modules/people/components/table/table-config.tsx`. Find where existing columns like `employmentStatus` or `jobTitle` are declared. Add a new column right after `employmentStatus` (or wherever fits the visual order):
 
 ```tsx
 {
@@ -1297,52 +1082,294 @@ Open `table-config.tsx`. Find where existing columns like `employmentStatus` or 
 }
 ```
 
-*(Follow whatever column-config shape the file actually uses — tanstack-table `ColumnDef`, custom wrapper, etc. Match the style of neighboring columns.)*
+Match the column-config shape (tanstack `ColumnDef`, custom wrapper, etc.) used by neighboring columns in that file. Do not introduce a new convention.
 
-- [ ] **Step 2: Add the toolbar filter**
+### Step 2: Create `use-people-filter-where.ts`
 
-Open `people-table-toolbar.tsx`. Find the existing filters (employment status, business unit). Add a worker-type filter that emits a `PeopleWhereInput.workerTypeIn` clause.
+- [ ] Create `src/modules/people/hooks/use-people-filter-where.ts`. Mirror the structure of `src/modules/vendor/vendor-list/hooks/use-vendor-filter-where.ts`. The shape should be:
 
-Follow the exact pattern of the existing employment-status filter — search for `employmentStatus` in that file. The filter selector should offer:
-- **All** (no filter)
-- **Employees** (`workerTypeIn: [EMPLOYEE]`)
-- **Externals** (`workerTypeIn: [CONTRACTOR, FREELANCER, INTERN, TEMP]`)
-- Individual types (one per enum value)
+```ts
+"use client";
 
-Use the i18n keys added in Task 10.
+import type { FilterBarValue } from "@kopexa/sight";
+import { parseAsJson, parseAsString, useQueryState } from "nuqs";
+import { useCallback, useMemo } from "react";
+import type {
+	PeopleEmploymentStatus,
+	PeopleSource,
+	PeopleWhereInput,
+	PeopleWorkerType,
+} from "@/generated/graphql";
+import {
+	convertFiltersToWhere,
+	type FilterToWhereConfig,
+} from "@/lib/filter-bar";
 
-- [ ] **Step 3: Build + manual verify**
+const parseAsFilterValues = parseAsJson<FilterBarValue[]>((value) => {
+	if (!Array.isArray(value)) return [];
+	return value.map((filter) => {
+		if (typeof filter !== "object" || filter === null) return filter;
+		if (typeof filter.value === "string" && filter.value.startsWith("[")) {
+			try {
+				return { ...filter, value: JSON.parse(filter.value) };
+			} catch {
+				return filter;
+			}
+		}
+		return filter;
+	}) as FilterBarValue[];
+});
 
-```bash
-pnpm run type-check && pnpm run dev
+const peopleFilterConfig: FilterToWhereConfig<PeopleWhereInput> = {
+	fields: [
+		{
+			fieldId: "workerType",
+			toWhere: (value) => {
+				if (Array.isArray(value)) {
+					return { workerTypeIn: value as PeopleWorkerType[] };
+				}
+				return { workerType: value as PeopleWorkerType };
+			},
+		},
+		{
+			fieldId: "employmentStatus",
+			toWhere: (value) => ({
+				employmentStatus: value as PeopleEmploymentStatus,
+			}),
+		},
+		{
+			fieldId: "source",
+			toWhere: (value) => ({
+				source: value as PeopleSource,
+			}),
+		},
+	],
+	searchToWhere: (search) => ({
+		or: [
+			{ firstNameContainsFold: search },
+			{ lastNameContainsFold: search },
+			{ emailContainsFold: search },
+		],
+	}),
+};
+
+export const usePeopleFilterWhere = (spaceId: string) => {
+	const [filterValues, setFilterValuesRaw] = useQueryState(
+		"filters",
+		parseAsFilterValues,
+	);
+	const [search, setSearchRaw] = useQueryState("q", parseAsString);
+
+	const setFilterValues = useCallback(
+		(values: FilterBarValue[]) => {
+			setFilterValuesRaw(values.length > 0 ? values : null);
+		},
+		[setFilterValuesRaw],
+	);
+
+	const setSearch = useCallback(
+		(value: string) => {
+			setSearchRaw(value || null);
+		},
+		[setSearchRaw],
+	);
+
+	const whereCondition = useMemo((): PeopleWhereInput => {
+		const filterWhere = convertFiltersToWhere(
+			filterValues ?? [],
+			search,
+			peopleFilterConfig,
+		);
+		const baseCondition: PeopleWhereInput = { spaceID: spaceId };
+		if (Object.keys(filterWhere).length > 0) {
+			return { ...baseCondition, ...filterWhere };
+		}
+		return baseCondition;
+	}, [filterValues, search, spaceId]);
+
+	return {
+		filterValues: filterValues ?? [],
+		setFilterValues,
+		search: search ?? "",
+		setSearch,
+		whereCondition,
+	};
+};
 ```
 
-Open the people list:
-- New "Worker type" column appears with a badge per row
-- Filter dropdown lets you narrow to just externals, just employees, or one specific type
-- Results update live
+**Verify the field/where names against the regenerated `src/generated/graphql.ts`** — the exact spelling of `PeopleWhereInput.workerType` / `workerTypeIn` / `firstNameContainsFold` may differ slightly. If you find different names, adjust accordingly. Do not invent names.
 
-- [ ] **Step 4: Commit**
+### Step 3: Rewrite `people-table-toolbar.tsx`
+
+- [ ] Replace the entire body of `src/modules/people/components/table/people-table-toolbar.tsx` with a `SearchFilterBar`-based implementation modeled on `vendor-table-toolbar.tsx`:
+
+```tsx
+"use client";
+
+import { type FilterBarFieldConfig, SearchFilterBar } from "@kopexa/sight";
+import { BriefcaseIcon, UserCheckIcon, UsersIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
+import {
+	PeopleEmploymentStatus,
+	PeopleWorkerType,
+} from "@/generated/graphql";
+import { enumValues } from "@/lib/utils";
+import { usePeopleFilterWhere } from "../../hooks/use-people-filter-where";
+
+type PeopleTableToolbarProps = {
+	spaceId: string;
+};
+
+export const PeopleTableToolbar = ({ spaceId }: PeopleTableToolbarProps) => {
+	const t = useTranslations("people");
+	const tCommon = useTranslations("common");
+
+	const { filterValues, setFilterValues, search, setSearch } =
+		usePeopleFilterWhere(spaceId);
+
+	const workerTypeOptions = useMemo(
+		() =>
+			enumValues(PeopleWorkerType).map((wt) => ({
+				value: wt,
+				label: t(`worker_type_${wt.toLowerCase()}`),
+			})),
+		[t],
+	);
+
+	const employmentStatusOptions = useMemo(
+		() =>
+			enumValues(PeopleEmploymentStatus).map((status) => ({
+				value: status,
+				label: t(`employment_status.${status}`),
+			})),
+		[t],
+	);
+
+	const fields: FilterBarFieldConfig[] = useMemo(
+		() => [
+			{
+				id: "workerType",
+				label: t("worker_type"),
+				type: "select",
+				icon: <UsersIcon className="size-4" />,
+				operators: ["equals", "in"],
+				options: workerTypeOptions,
+			},
+			{
+				id: "employmentStatus",
+				label: tCommon("status"),
+				type: "select",
+				icon: <UserCheckIcon className="size-4" />,
+				operators: ["equals"],
+				options: employmentStatusOptions,
+			},
+			{
+				id: "source",
+				label: t("source"),
+				type: "select",
+				icon: <BriefcaseIcon className="size-4" />,
+				operators: ["equals"],
+				options: [
+					{ value: "PERSONIO", label: "Personio" },
+					{ value: "CSV", label: "CSV" },
+					{ value: "MANUAL", label: t("source_manual") },
+					{ value: "VENDOR_ONBOARDING", label: t("source_vendor_onboarding") },
+				],
+			},
+		],
+		[t, tCommon, workerTypeOptions, employmentStatusOptions],
+	);
+
+	return (
+		<SearchFilterBar
+			fields={fields}
+			filters={filterValues}
+			onFiltersChange={setFilterValues}
+			defaultSearch={search}
+			onSearchValueChange={setSearch}
+			searchDebounce={300}
+			allowMultiple={false}
+		/>
+	);
+};
+```
+
+If `enumValues` or `FilterBarFieldConfig` are imported from a slightly different path, follow whatever the vendor toolbar uses. Do not invent imports — confirm by reading the vendor file.
+
+### Step 4: Wire the toolbar into the People list page
+
+- [ ] Find where `PeopleTableToolbar` is currently rendered. From the existing minimal component, it likely takes no props. Find the parent (probably `src/modules/people/components/people-list-header.tsx` or the page at `src/app/(protected)/(space)/s/[spaceId]/(root)/people/page.tsx`). Update the parent so that:
+  - It passes `spaceId` to `PeopleTableToolbar`
+  - It calls `usePeopleFilterWhere(spaceId)` itself (or lifts the call to a higher component) and passes the resulting `whereCondition` into the People list query (`useGetPeoples` or similar)
+  - The toolbar and the list share the same hook instance — either by lifting the hook into a shared parent or by re-calling it (the `nuqs` URL state means both calls return the same values)
+
+If the People list query is already filtering by `spaceId`, replace that with the `whereCondition` returned from the hook (which already includes the `spaceID` filter).
+
+### Step 5: Build + manual verify
+
+- [ ] Run:
 
 ```bash
-git add src/modules/people/components/table/
-git commit -m "feat(people): add worker_type column and filter to roster"
+cd /Users/juliankoehn/workbox/github.com/kopexa-grc/kopexa-frontend
+pnpm run type-check
 ```
+
+Expected: no errors. If `enumValues` is missing or the `FilterBarFieldConfig` type isn't found, fix the imports — do not stub them.
+
+Then start the dev server and walk through:
+1. People list shows the new SearchFilterBar at the top (search input + add-filter button)
+2. The "Worker type" column shows a badge per row
+3. Click "+ Filter" → "Worker type" → select "Contractor" → only contractors show
+4. Switch to "is in" → select multiple (Contractor, Freelancer) → both show
+5. Search by name + filter combined → both apply
+6. URL shows `?filters=...&q=...` — filters survive page reload
+7. Other filters (employment status, source) apply in the same way
+
+### Step 6: Commit
+
+- [ ] 
+
+```bash
+git add src/modules/people/components/table/table-config.tsx \
+        src/modules/people/components/table/people-table-toolbar.tsx \
+        src/modules/people/hooks/use-people-filter-where.ts \
+        src/modules/people/components/people-list-header.tsx \
+        src/app/\(protected\)/\(space\)/s/\[spaceId\]/\(root\)/people/page.tsx
+git commit -m "feat(people): migrate roster to SearchFilterBar + worker_type column"
+```
+
+(Adjust the file list to match what you actually touched.)
 
 ---
 
-## Task 17: End-to-end sanity check + push
+## Task 17: Generate consolidated migration, e2e sanity check, push
 
-- [ ] **Step 1: Full backend test sweep**
+This is the **final task** of the plan and the only place a database migration is generated.
+
+### Step 1: Generate the consolidated migration
+
+- [ ] Make sure the dev `kopexa serve` has been booted at least once since the last schema change so the dev DB is in sync. Then:
 
 ```bash
 cd /Users/juliankoehn/workbox/github.com/kopexa-grc/kopexa
-go test ./pkg/enums/ ./internal/channels/graphapi/ ./internal/store/... -count=1
+./kopexa-gen migrate --name people_external_workforce
 ```
 
-Expected: all green.
+Expected: new SQL files in both `db/migrations/` and `db/migrations-goose-postgres/`, plus updated `atlas.sum`. **Use only `kopexa-gen`** — never call atlas/goose directly.
 
-- [ ] **Step 2: Lint**
+- [ ] Inspect the generated SQL — verify it contains all 8 new columns (`worker_type`, `source`, `external_id`, `vendor_id`, `contract_end_date`, `last_synced_at`, `sync_state`, `sync_error`), the partial unique index `(space_id, source, external_id) WHERE external_id IS NOT NULL AND deleted_at IS NULL`, and the FK from `people.vendor_id → vendors.id`.
+
+- [ ] Commit just the migration:
+
+```bash
+git add db/migrations/ db/migrations-goose-postgres/
+git commit -m "chore(db): migrate people for worker_type and vendor link"
+```
+
+### Step 2: Backend lint
+
+- [ ] 
 
 ```bash
 make lint
@@ -1350,7 +1377,9 @@ make lint
 
 Expected: no errors.
 
-- [ ] **Step 3: Frontend typecheck + build**
+### Step 3: Frontend typecheck + build
+
+- [ ] 
 
 ```bash
 cd /Users/juliankoehn/workbox/github.com/kopexa-grc/kopexa-frontend
@@ -1360,19 +1389,32 @@ pnpm run build
 
 Expected: no errors.
 
-- [ ] **Step 4: Manual golden-path check in browser**
+### Step 4: Manual golden-path check in browser
 
-Start both servers. Walk through:
-1. Create an employee — defaults to Employee, no extra fields shown. ✓
-2. Create a contractor — switches to show vendor + contract end date. ✓
-3. Submit without vendor → validation error on the vendor field. ✓
-4. Submit with vendor + future date → success, new row appears. ✓
-5. Filter roster to "Externals only" → only the contractor shows. ✓
-6. Filter to "Employees only" → contractor hidden. ✓
-7. Open contractor detail page → worker type + vendor + contract end visible. ✓
-8. Edit contractor → vendor change persists; reload shows new vendor. ✓
+- [ ] Start both servers and walk through:
+1. Create an employee → defaults to Employee, no extra fields shown
+2. Create a contractor → vendor + contract end date appear conditionally
+3. Submit without vendor → zod validation error on the vendor field
+4. Submit with vendor + future date → success, new row appears in the list
+5. New `SearchFilterBar` is visible at the top of the people list (search input + add-filter button)
+6. New "Worker type" column shows a badge per row
+7. Add filter "Worker type = Contractor" → only the contractor shows
+8. Switch the operator to "is in" → select multiple types → all selected types show
+9. Combine search + filter — both apply, URL shows `?filters=…&q=…`, reload preserves them
+10. Open contractor detail page → worker type + vendor + contract end visible
+11. Edit contractor → change vendor → save → detail page shows new vendor
 
-- [ ] **Step 5: Push both branches**
+- [ ] Note: do NOT run `go test ./internal/channels/graphapi/...` or `./internal/store/...` as part of this sweep — those are generated-code surfaces and we explicitly skipped per-task tests for them. The enum test suite is the only Go suite the plan adds:
+
+```bash
+go test ./pkg/enums/ -count=1
+```
+
+Expected: green.
+
+### Step 5: Push both branches
+
+- [ ] 
 
 ```bash
 cd /Users/juliankoehn/workbox/github.com/kopexa-grc/kopexa
@@ -1382,9 +1424,9 @@ cd /Users/juliankoehn/workbox/github.com/kopexa-grc/kopexa-frontend
 git push -u origin feat/people-platform
 ```
 
-- [ ] **Step 6: Open PRs**
+### Step 6: Open PRs
 
-For each repo, open a PR titled `feat(people): worker_type + external workforce support` with a body that links to the spec at `comms/docs/superpowers/specs/2026-04-14-people-platform-roadmap.md` (Block 1) and this plan (Plan 1.1).
+- [ ] For each repo, open a PR titled `feat(people): worker_type + external workforce support` with a body that links to the spec at `comms/docs/superpowers/specs/2026-04-14-people-platform-roadmap.md` (Block 1) and this plan (Plan 1.1).
 
 ---
 
@@ -1395,13 +1437,14 @@ For each repo, open a PR titled `feat(people): worker_type + external workforce 
 | Spec deliverable | Where |
 |---|---|
 | Schema deltas (`external_id`, `source`, `worker_type`, `vendor_id`, `contract_end_date`, `last_synced_at`, `sync_state`, `sync_error`) | Task 4 |
+| Database migration (one consolidated SQL file via `kopexa-gen`) | Task 17 step 1 (final task only) |
 | HR connector framework | **Deferred to Plan 1.2** (header) |
 | `hr_field_mapping` schema | **Deferred to Plan 1.2** |
 | Sync scoping rule | **Deferred to Plan 1.2** |
 | River sync job | **Deferred to Plan 1.2** |
 | Admin UI connector/mapping/history | **Deferred to Plan 1.2** |
 | Add Person form with worker-type selector | Tasks 13-14 |
-| Roster view with worker-type filter | Task 16 |
+| Roster view with worker-type column + SearchFilterBar | Task 16 |
 | River cron sweep (contract_end → terminated event) | **Deferred to Block 2** (requires `people_employment_event`) |
 | Default mapping config (source_wins / kopexa_wins) | **Deferred to Plan 1.2** |
 
@@ -1409,7 +1452,9 @@ All schema fields required by Plan 1.2 are present after Plan 1.1 ships. Plan 1.
 
 **Placeholder scan:** no `TBD` / `TODO` / "add appropriate error handling". All step code is either complete Go/TSX or explicit pattern references with search commands.
 
-**Type consistency check:** `WorkerType` / `PeopleSource` / `SyncState` enum symbols are used identically in Tasks 1-3 (definition), Task 4 (schema), Tasks 7-9 (tests), Tasks 12-14 (frontend). The field `workerType` / `vendorId` / `contractEndDate` naming is the same in zod schema, form components, and mutation payload.
+**Type consistency check:** `WorkerType` / `PeopleSource` / `SyncState` enum symbols are used identically in Tasks 1-3 (definition) and Task 4 (schema). The field `workerType` / `vendorId` / `contractEndDate` naming is the same in zod schema, form components, mutation payload, and filter hook.
+
+**Workflow conventions:** Tasks 5 and 7-9 from the original draft are explicitly skipped (migration deferred to Task 17; generated-code tests not worth writing). The plan documents this inline at each skipped section so an implementer reading sequentially does not get confused.
 
 **Bootstrap caveat:** Task 4 explicitly warns about the known code-gen bootstrap problem and confirms Plan 1.1 does not trip it (no hooks reference the new fields).
 
