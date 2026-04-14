@@ -16,7 +16,8 @@ Today, Kopexa has a `People` schema (HR roster) and `BusinessUnit` membership, b
 ## 2. Goals
 
 - **Audit-ready evidence** for ISO 27001 Annex A.6 (HR security), A.5.18 (access rights), A.5.10 (acceptable use), and SOC 2 CC1.4 / CC6.2 / CC6.3.
-- **Single canonical roster** of current and former employees, sourced from the customer's HR system (Personio, HR Works, generic CSV) with field-specific sync rules.
+- **Single canonical roster** of all workforce — employees, contractors, freelancers, interns, temps — sourced from the HR system where applicable (Personio, HR Works, CSV) and from manual/vendor-onboarding flows for externals. Field-specific sync rules per source.
+- **Externals as first-class citizens.** Contractors and freelancers are not a footnote: auditors specifically test NDAs, background checks, security training, and access reviews for them. They live in the same `people` table with a `worker_type` discriminator and follow the same workflows as employees.
 - **Historical truth**: answer "who was in department X on date Y" and "who held account Z on date Y" without ambiguity.
 - **Workflow automation** for joiner / mover / leaver flows, including assignment of policies, NDAs, trainings, and access provisioning/deprovisioning tasks.
 - **Self-service surface** for employees including office workers (magic link), enterprise SSO, and shop-floor workers via shared kiosks.
@@ -34,9 +35,10 @@ Today, Kopexa has a `People` schema (HR roster) and `BusinessUnit` membership, b
 
 | Concept | Schema | What it represents |
 |---|---|---|
-| **People** | `people` | HR roster entry: every current or former employee. May or may not have a Kopexa login. Sourced from HR system. |
+| **People** | `people` | Canonical workforce entry: every current or former **employee, contractor, freelancer, intern, or temp**. May or may not have a Kopexa login. Sourced from HR system, vendor-onboarding, or manual flow depending on `worker_type`. The `worker_type` discriminator is the *only* difference between an employee and a contractor in this domain. |
 | **User** | `user` | Kopexa platform login. Acts in the system. May be linked to a `People` row, may not (e.g. external auditors, contractors). |
 | **Account** | `account` | An identity in an external system (M365, AWS, Okta). Already linked to People via `account.people_id`. |
+| **Vendor** | `vendor` *(existing)* | A supplier/partner organization. Used by Block 1 as the optional `vendor_id` on a contractor `People` row to record which company a contractor was hired through. |
 | **BusinessUnit** | `business_unit` | Department / team. Hierarchical. |
 | **BusinessUnitMembership** | `business_unit_membership` | Existing User↔BusinessUnit join. *Stays untouched* — it tracks Kopexa users, not HR people. |
 
@@ -48,30 +50,38 @@ Critical separation: **`User` ≠ `People`**. This roadmap operates entirely in 
 
 The eight blocks below are sequenced top-to-bottom. Each block is independently shippable (its own design + plan + implementation cycle). Dependencies are explicit in each block's "Depends on" line.
 
-### Block 1 — People Core + HR Import
+### Block 1 — People Core + HR Import (incl. External Workforce)
 
-**Goal:** Make `People` the canonical HR roster, sourced from the customer's HR system with configurable per-field sync rules.
+**Goal:** Make `People` the canonical workforce roster covering employees *and* externals (contractors, freelancers, interns, temps), sourced from the customer's HR system where applicable and from vendor-onboarding / manual flows otherwise. Per-field sync rules are configurable per source.
 
-**Why first:** Everything else hangs off People. No People → no JML → no acks → no access reviews.
+**Why first:** Everything else hangs off People. No People → no JML → no acks → no access reviews. And externals must be in from day one because retrofitting "contractor support" into already-shipped workflows is much more expensive than building it in.
 
 **Key deliverables**
 - HR connector framework (`internal/services/hr_sync/` or similar). First connector: **Personio**. Second: generic **CSV upload**. Future: HR Works, BambooHR, SCIM.
 - Schema deltas on `people`:
   - `external_id` (string, optional, unique per `(source, space_id)`)
-  - `source` (enum: `personio`, `csv`, `manual`, …)
+  - `source` (enum: `personio`, `csv`, `manual`, `vendor_onboarding`, …)
+  - `worker_type` (enum: `employee`, `contractor`, `freelancer`, `intern`, `temp`, default `employee`)
+  - `vendor_id` (optional FK → `vendor`, used when a contractor was hired through a supplier company)
+  - `contract_end_date` (optional time — semantically the end of an external's engagement; for employees this is typically nil and `end_date` is used instead, but both fields may co-exist)
   - `last_synced_at` (time, optional)
-  - `sync_state` (enum: `synced`, `drifted`, `pending`, `error`)
+  - `sync_state` (enum: `synced`, `drifted`, `pending`, `error`, `not_synced`)
   - `sync_error` (text, optional)
 - New schema: `hr_field_mapping` per `(space_id, source)` defining for each People field a sync mode:
   - `source_wins` — HR system overwrites Kopexa on every sync (default for identity fields)
   - `kopexa_wins` — HR sync ignores this field (default for GRC-only fields)
   - `manual_review` — sync surfaces a diff, admin resolves
+- Sync scoping rule: HR connectors **only manage `worker_type = employee`** by default. Externals (`source = manual` or `vendor_onboarding`) are never touched by HR sync — they are owned in Kopexa. This rule is configurable per mapping if a customer's HR system actually does manage their contractors.
 - Sync runner as a River job, scheduled per space. Diff report + audit trail per sync run.
-- Admin UI for connector setup, mapping configuration, sync history, manual sync trigger.
+- Admin UI:
+  - Connector setup, mapping configuration, sync history, manual sync trigger.
+  - **Add Person** form with worker-type selector. Employee form fields = today; contractor form additionally captures `vendor_id`, `contract_end_date`, optional `project_reference`.
+  - Roster view with filters by `worker_type`, `vendor`, `business_unit`, `employment_status`.
+- River cron sweep: when `contract_end_date` is reached for an external, automatically emit a `terminated` employment event (Block 2) which then triggers offboarding workflows (Block 5).
 
 **Default mapping (Personio)**
 - `source_wins`: `email`, `first_name`, `last_name`, `start_date`, `end_date`, `job_title`, `department`, `employment_status`
-- `kopexa_wins`: anything GRC-specific added in later blocks (training status, ack state, etc.)
+- `kopexa_wins`: anything GRC-specific added in later blocks (training status, ack state, etc.); `worker_type`, `vendor_id`, `contract_end_date` are also `kopexa_wins` by default.
 
 **Depends on:** nothing. Foundational.
 
@@ -146,7 +156,7 @@ The eight blocks below are sequenced top-to-bottom. Each block is independently 
 
 **Key deliverables**
 - New schema: `workflow_template`
-  - `space_id`, `trigger_event` (enum mapped to `people_employment_event.event_type`), `name`, `version`
+  - `space_id`, `trigger_event` (enum mapped to `people_employment_event.event_type`), `name`, `version`, `applies_to_worker_types` (set of `worker_type` values; e.g. a "Contractor Onboarding" template only fires for `worker_type = contractor | freelancer`, while the default "Employee Onboarding" template fires for `employee`)
 - New schema: `workflow_template_step`
   - `workflow_template_id`, `step_type` (enum: `assign_documents`, `assign_trainings`, `request_account_provisioning`, `request_account_deprovisioning`, `return_asset`, `manual_task`), `order`, `assignee_role` (enum: `manager`, `it`, `hr`, `security`), `due_within_days`, `config` (JSON for step-specific params)
 - New schema: `workflow_run` — one per Person × triggering event
@@ -262,18 +272,29 @@ People records contain sensitive employment data and must be tightly access-cont
 - **People themselves**: when a Person has a linked User, that User must be able to view *only their own* People row plus their own obligations. Achieved via interceptor on Workforce Hub queries (similar to the Notification user-scope interceptor).
 - **HR sync** runs as a system actor with elevated read but write-only-via-mapping, never bypasses privacy on adjacent entities.
 
-### 6.3 Manager-Proxy as the Universal Fallback
+### 6.3 Worker-Type Uniformity
+
+All workflows in Blocks 3-7 operate on `People` regardless of `worker_type`. There are no parallel codepaths for "employee acks" vs "contractor acks" — there is one acknowledgement system, one training system, one access-review system. Differentiation happens at the *configuration* layer:
+
+- **Workflow templates** (Block 5) declare `applies_to_worker_types` and only fire for matching workers
+- **Document assignments** and **training assignments** can scope by `worker_type` in addition to BU
+- **Reports** (Block 7) can filter or group by `worker_type`
+- **Workforce Hub** (Block 8) shows each Person their obligations regardless of worker type; auth method may differ (a contractor may only have a magic link, never a kiosk badge)
+
+This keeps the audit story uniform — auditors see one "training completion log" with a worker-type column, not two disjoint reports they have to reconcile.
+
+### 6.4 Manager-Proxy as the Universal Fallback
 
 Blocks 3, 4, 5 (and indirectly 6, 7) **must** be operable through the Main app without Workforce Hub. The Manager-Proxy UI is non-negotiable in those blocks because:
 - Some customers will never deploy Workforce Hub (cost / complexity / culture)
 - Even with Workforce Hub deployed, edge cases (sick leave, paper signatures, corrections) require admin intervention
 - Workforce Hub is an *optimization*, not a *prerequisite*
 
-### 6.4 i18n
+### 6.5 i18n
 
 All employee-facing surfaces (Workforce Hub, emails, kiosk shell) must support German *(du-form, never Sie)* and English from day one. Re-uses the shared `internal/i18n` bundle and `resources/locales/{de,en}.yaml` already established for emails.
 
-### 6.5 Migration Strategy
+### 6.6 Migration Strategy
 
 The existing flat `BusinessUnit ↔ People` M2M (Block 2) is the only hard migration. All other blocks are additive — new schemas, new endpoints, no breaking changes to current entities. Block 2's migration writes one open membership row per existing edge and drops the edge table; backfill is fast because the volume is small (people are O(thousands), not O(millions)).
 
@@ -340,6 +361,7 @@ The People Platform is "done" (V1 complete) when a Kopexa customer can:
 4. **Run a quarterly access review** of M365 admin accounts, route each item to the appropriate manager, and export the resulting decisions as an evidence pack for the auditor.
 5. **Deploy Workforce Hub** at `<orgslug>.employee.kopexa.com`, have office workers self-serve via magic link, and have shop-floor workers access policies + complete trainings via a kiosk terminal logged in by badge.
 6. **Print the A.6.3 training-completion report** for any historical date and prove that 100% of in-scope employees completed mandatory training within the period.
+7. **Onboard an external contractor** through the "Add Person" form with a vendor reference and a contract end date, have them automatically receive the contractor-specific NDA + security-awareness training via a "Contractor Onboarding" workflow template, and have offboarding fire automatically on the contract end date — with the same audit-trail evidence as a regular employee.
 
 ---
 
